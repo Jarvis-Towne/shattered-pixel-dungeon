@@ -1,0 +1,2 @@
+GitHub connector write permission test on 2026-10-24.
+Temporary diagnostic branch; no production files modified.
