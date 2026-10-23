@@ -479,6 +479,8 @@ public enum Icons {
 				return new ItemSprite(ItemSpriteSheet.RAPIER);
 			case CLERIC:
 				return new ItemSprite(ItemSpriteSheet.ARTIFACT_TOME);
+			case COW:
+				return new Image(Assets.Interfaces.COW_ICONS, 0, 0, 16, 16);
 			default:
 				return null;
 		}

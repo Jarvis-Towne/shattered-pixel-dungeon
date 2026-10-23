@@ -27,6 +27,10 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CowBell;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.OxHorn;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.CowhideArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.WarmMilk;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -75,6 +79,9 @@ public class WndHeroInfo extends WndTabbed {
 				break;
 			case CLERIC:
 				tabIcon = new ItemSprite(ItemSpriteSheet.ARTIFACT_TOME, null);
+				break;
+			case COW:
+				tabIcon = Icons.get(cl);
 				break;
 		}
 
@@ -206,6 +213,10 @@ public class WndHeroInfo extends WndTabbed {
 							Icons.TALENT.get(),
 							new ItemSprite(ItemSpriteSheet.CUDGEL),
 							new ItemSprite(ItemSpriteSheet.SCROLL_ISAZ)};
+					break;
+				case COW:
+					icons = new Image[]{new ItemSprite(new CowBell()), new ItemSprite(new OxHorn()),
+							new ItemSprite(new CowhideArmor()), new ItemSprite(new WarmMilk())};
 					break;
 			}
 			for (Image im : icons) {

@@ -33,6 +33,12 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
 import com.shatteredpixel.shatteredpixeldungeon.items.KingsCrown;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.OxHorn;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.CowhideArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CowBell;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.WarmMilk;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.MeadowCake;
+import com.shatteredpixel.shatteredpixeldungeon.items.remains.CrackedBell;
 import com.shatteredpixel.shatteredpixeldungeon.items.LiquidMetal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
 import com.shatteredpixel.shatteredpixeldungeon.items.TengusMask;
@@ -190,12 +196,14 @@ public enum Catalog {
 	static {
 
 		MELEE_WEAPONS.addItems(Generator.Category.WEP_T1.classes);
+		MELEE_WEAPONS.addItems(OxHorn.class);
 		MELEE_WEAPONS.addItems(Generator.Category.WEP_T2.classes);
 		MELEE_WEAPONS.addItems(Generator.Category.WEP_T3.classes);
 		MELEE_WEAPONS.addItems(Generator.Category.WEP_T4.classes);
 		MELEE_WEAPONS.addItems(Generator.Category.WEP_T5.classes);
 
 		ARMOR.addItems(Generator.Category.ARMOR.classes);
+		ARMOR.addItems(CowhideArmor.class);
 
 		THROWN_WEAPONS.addItems(Generator.Category.MIS_T1.classes);
 		THROWN_WEAPONS.addItems(Generator.Category.MIS_T2.classes);
@@ -222,7 +230,7 @@ public enum Catalog {
 		TRINKETS.addItems(Generator.Category.TRINKET.classes);
 
 		MISC_EQUIPMENT.addItems(BrokenSeal.class, SpiritBow.class, Waterskin.class, VelvetPouch.class,
-				PotionBandolier.class, ScrollHolder.class, MagicalHolster.class, Amulet.class);
+				PotionBandolier.class, ScrollHolder.class, MagicalHolster.class, Amulet.class, CowBell.class);
 
 
 
@@ -236,7 +244,7 @@ public enum Catalog {
 
 		FOOD.addItems( Food.class, Pasty.class, MysteryMeat.class, ChargrilledMeat.class,
 				StewedMeat.class, FrozenCarpaccio.class, SmallRation.class, Berry.class,
-				SupplyRation.class, Blandfruit.class, PhantomMeat.class, MeatPie.class );
+				SupplyRation.class, Blandfruit.class, PhantomMeat.class, MeatPie.class, WarmMilk.class, MeadowCake.class );
 
 		EXOTIC_POTIONS.addItems(ExoticPotion.exoToReg.keySet().toArray(new Class[0]));
 
@@ -262,7 +270,7 @@ public enum Catalog {
 				CorpseDust.class, Embers.class, CeremonialCandle.class, DarkGold.class, EscapeCrystal.class, VaultBeacon.class, DwarfToken.class, ImpStatue.class,
 				GooBlob.class, TengusMask.class, MetalShard.class, KingsCrown.class,
 				LiquidMetal.class, ArcaneResin.class,
-				SealShard.class, BrokenStaff.class, CloakScrap.class, BowFragment.class, BrokenHilt.class, TornPage.class);
+				SealShard.class, BrokenStaff.class, CloakScrap.class, BowFragment.class, BrokenHilt.class, TornPage.class, CrackedBell.class);
 
 	}
 

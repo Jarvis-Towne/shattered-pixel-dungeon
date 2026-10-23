@@ -200,7 +200,18 @@ public enum Talent {
 	//universal T4
 	HEROIC_ENERGY(26, 4), //See icon() and title() for special logic for this one
 	//Ratmogrify T4
-	RATSISTANCE(215, 4), RATLOMACY(216, 4), RATFORCEMENTS(217, 4);
+	RATSISTANCE(215, 4), RATLOMACY(216, 4), RATFORCEMENTS(217, 4),
+
+	//犟牛：图标来自独立图集，既有天赋序号保持不变。
+	COW_HEARTY_RATION(256), COW_THICK_HIDE(258), COW_HORN_POLISH(257), COW_STUBBORN_SPARK(256),
+	COW_LONG_CHARGE(259), COW_EARTHSHAKER(257), COW_WARM_MILK(260), COW_STEADY_HOOVES(258), COW_BELL_RESONANCE(256),
+	COW_STAMINA(256, 3), COW_RESOLVE(257, 3),
+	COW_RUSHING_FORCE(259, 3), COW_AFTERSHOCK(257, 3), COW_UNSTOPPABLE(258, 3),
+	COW_SHARED_SHELTER(260, 3), COW_PATIENT_WATCH(258, 3), COW_GENTLE_RECOVERY(260, 3),
+	COW_LONG_RUSH(259, 4), COW_THUNDER_HOOVES(257, 4), COW_CHAIN_RUSH(259, 4),
+	COW_WIDE_PASTURE(260, 4), COW_LIVING_FENCE(258, 4), COW_RESTFUL_FIELD(260, 4),
+	COW_LONG_NIGHT(261, 4), COW_SOLAR_FLARE(261, 4), COW_DAWN_BRINGER(261, 4);
+
 
 	public static class ImprovisedProjectileCooldown extends FlavourBuff{
 		public int icon() { return BuffIndicator.TIME; }
@@ -463,6 +474,8 @@ public enum Talent {
 					return 154;
 				case CLERIC:
 					return 186;
+				case COW:
+					return 256;
 			}
 		} else {
 			return icon;
@@ -585,6 +598,9 @@ public enum Talent {
 	public static class NatureBerriesDropped extends CounterBuff{{revivePersists = true;}};
 
 	public static void onFoodEaten( Hero hero, float foodVal, Item foodSource ){
+		if (foodVal > 0 && hero.hasTalent(COW_HEARTY_RATION)) {
+			Buff.affect(hero, Barrier.class).incShield(1 + hero.pointsInTalent(COW_HEARTY_RATION));
+		}
 		if (hero.hasTalent(HEARTY_MEAL)){
 			//4/6 HP healed, when hero is below 33% health (with a little rounding up)
 			if (hero.HP/(float)hero.HT < 0.334f) {
@@ -994,6 +1010,9 @@ public enum Talent {
 			case CLERIC:
 				Collections.addAll(tierTalents, SATIATED_SPELLS, HOLY_INTUITION, SEARING_LIGHT, SHIELD_OF_LIGHT);
 				break;
+			case COW:
+				Collections.addAll(tierTalents, COW_HEARTY_RATION, COW_THICK_HIDE, COW_HORN_POLISH, COW_STUBBORN_SPARK);
+				break;
 		}
 		for (Talent talent : tierTalents){
 			if (replacements.containsKey(talent)){
@@ -1023,6 +1042,9 @@ public enum Talent {
 			case CLERIC:
 				Collections.addAll(tierTalents, ENLIGHTENING_MEAL, RECALL_INSCRIPTION, SUNRAY, DIVINE_SENSE, BLESS);
 				break;
+			case COW:
+				Collections.addAll(tierTalents, COW_LONG_CHARGE, COW_EARTHSHAKER, COW_WARM_MILK, COW_STEADY_HOOVES, COW_BELL_RESONANCE);
+				break;
 		}
 		for (Talent talent : tierTalents){
 			if (replacements.containsKey(talent)){
@@ -1051,6 +1073,9 @@ public enum Talent {
 				break;
 			case CLERIC:
 				Collections.addAll(tierTalents, CLEANSE, LIGHT_READING);
+				break;
+			case COW:
+				Collections.addAll(tierTalents, COW_STAMINA, COW_RESOLVE);
 				break;
 		}
 		for (Talent talent : tierTalents){
@@ -1115,6 +1140,12 @@ public enum Talent {
 				break;
 			case PALADIN:
 				Collections.addAll(tierTalents, LAY_ON_HANDS, AURA_OF_PROTECTION, WALL_OF_LIGHT);
+				break;
+			case BULLDOZER:
+				Collections.addAll(tierTalents, COW_RUSHING_FORCE, COW_AFTERSHOCK, COW_UNSTOPPABLE);
+				break;
+			case HERDGUARD:
+				Collections.addAll(tierTalents, COW_SHARED_SHELTER, COW_PATIENT_WATCH, COW_GENTLE_RECOVERY);
 				break;
 		}
 		for (Talent talent : tierTalents){

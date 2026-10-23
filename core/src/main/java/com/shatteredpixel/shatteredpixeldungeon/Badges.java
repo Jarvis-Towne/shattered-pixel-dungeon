@@ -207,7 +207,13 @@ public class Badges {
 		GAMES_PLAYED_5              ( 124, BadgeType.GLOBAL ),
 		HIGH_SCORE_5                ( 125 ),
 		CHAMPION_2                  ( 126 ),
-		CHAMPION_3                  ( 127 );
+		CHAMPION_3                  ( 127 ),
+
+		MASTERY_COW,
+		BOSS_SLAIN_1_COW,
+		VICTORY_COW,
+		BOSS_SLAIN_3_BULLDOZER,
+		BOSS_SLAIN_3_HERDGUARD;
 
 		public boolean meta;
 
@@ -807,6 +813,7 @@ public class Badges {
 		firstBossClassBadges.put(HeroClass.HUNTRESS, Badge.BOSS_SLAIN_1_HUNTRESS);
 		firstBossClassBadges.put(HeroClass.DUELIST, Badge.BOSS_SLAIN_1_DUELIST);
 		firstBossClassBadges.put(HeroClass.CLERIC, Badge.BOSS_SLAIN_1_CLERIC);
+		firstBossClassBadges.put(HeroClass.COW, Badge.BOSS_SLAIN_1_COW);
 	}
 
 	private static LinkedHashMap<HeroClass, Badge> victoryClassBadges = new LinkedHashMap<>();
@@ -817,6 +824,7 @@ public class Badges {
 		victoryClassBadges.put(HeroClass.HUNTRESS, Badge.VICTORY_HUNTRESS);
 		victoryClassBadges.put(HeroClass.DUELIST, Badge.VICTORY_DUELIST);
 		victoryClassBadges.put(HeroClass.CLERIC, Badge.VICTORY_CLERIC);
+		victoryClassBadges.put(HeroClass.COW, Badge.VICTORY_COW);
 	}
 
 	private static LinkedHashMap<HeroSubClass, Badge> thirdBossSubclassBadges = new LinkedHashMap<>();
@@ -833,6 +841,8 @@ public class Badges {
 		thirdBossSubclassBadges.put(HeroSubClass.MONK, Badge.BOSS_SLAIN_3_MONK);
 		thirdBossSubclassBadges.put(HeroSubClass.PRIEST, Badge.BOSS_SLAIN_3_PRIEST);
 		thirdBossSubclassBadges.put(HeroSubClass.PALADIN, Badge.BOSS_SLAIN_3_PALADIN);
+		thirdBossSubclassBadges.put(HeroSubClass.BULLDOZER, Badge.BOSS_SLAIN_3_BULLDOZER);
+		thirdBossSubclassBadges.put(HeroSubClass.HERDGUARD, Badge.BOSS_SLAIN_3_HERDGUARD);
 	}
 	
 	public static void validateBossSlain() {
@@ -954,6 +964,9 @@ public class Badges {
 				break;
 			case CLERIC:
 				badge = Badge.MASTERY_CLERIC;
+				break;
+			case COW:
+				badge = Badge.MASTERY_COW;
 				break;
 		}
 		

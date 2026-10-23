@@ -416,8 +416,10 @@ public class SurfaceScene extends PixelScene {
 		private static final int HEIGHT	= 32;
 		
 		public Avatar( HeroClass cl ) {
-			super( Assets.Sprites.AVATARS );
-			frame( new TextureFilm( texture, WIDTH, HEIGHT ).get( cl.ordinal() ) );
+			super( cl == HeroClass.COW ? Assets.Sprites.COW_AVATAR : Assets.Sprites.AVATARS );
+			if (cl != HeroClass.COW) {
+				frame( new TextureFilm( texture, WIDTH, HEIGHT ).get( cl.ordinal() ) );
+			}
 		}
 	}
 	

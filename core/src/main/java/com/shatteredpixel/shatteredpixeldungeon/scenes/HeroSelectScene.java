@@ -262,7 +262,8 @@ public class HeroSelectScene extends PixelScene {
 			}
 
 			int cols = (int)Math.ceil(heroBtns.size()/2f);
-			float curX = insets.left + (leftArea - btnWidth * cols + (cols-1))/2f;
+			btnWidth = Math.min(btnWidth, (int)(leftArea - (cols - 1) - 4)/cols);
+			float curX = insets.left + (leftArea - btnWidth * cols - (cols-1))/2f;
 			float curY = title.bottom() + uiSpacing;
 
 			int count = 0;
@@ -325,7 +326,7 @@ public class HeroSelectScene extends PixelScene {
 		} else {
 			background.visible = false;
 
-			int btnWidth = HeroBtn.MIN_WIDTH;
+			int btnWidth = Math.min(HeroBtn.MIN_WIDTH, (int)(w / heroBtns.size()));
 
 			float curX = insets.left + (w - btnWidth * heroBtns.size()) / 2f;
 			if (curX > 0) {
@@ -457,6 +458,10 @@ public class HeroSelectScene extends PixelScene {
 			btnOptions.visible = btnOptions.active = !SPDSettings.intro();
 
 		} else {
+			//犟牛插画为横屏左侧界面留白，竖屏裁切时对准角色而非整张图的中心。
+			background.x = (Camera.main.width - background.width()) / 2f
+					- (cl == HeroClass.COW ? 0.13f * background.width() : 0f);
+			PixelScene.align(background);
 			title.visible = false;
 
 			startBtn.visible = startBtn.active = true;

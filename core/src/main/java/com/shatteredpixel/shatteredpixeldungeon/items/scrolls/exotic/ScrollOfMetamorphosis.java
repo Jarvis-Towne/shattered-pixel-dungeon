@@ -211,6 +211,8 @@ public class ScrollOfMetamorphosis extends ExoticScroll {
 			Set<Talent> curTalentsAtTier = Dungeon.hero.talents.get(tier-1).keySet();
 
 			for (HeroClass cls : HeroClass.values()){
+				//倔劲与牛铃属于犟牛的职业机制，避免其他职业抽到无法使用的天赋。
+				if (cls == HeroClass.COW && Dungeon.hero.heroClass != HeroClass.COW) continue;
 
 				ArrayList<LinkedHashMap<Talent, Integer>> clsTalents = new ArrayList<>();
 				Talent.initClassTalents(cls, clsTalents);

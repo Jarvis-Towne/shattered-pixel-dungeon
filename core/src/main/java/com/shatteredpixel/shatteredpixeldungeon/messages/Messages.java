@@ -72,7 +72,9 @@ public class Messages {
 			Assets.Messages.PLANTS,
 			Assets.Messages.SCENES,
 			Assets.Messages.UI,
-			Assets.Messages.WINDOWS
+			Assets.Messages.WINDOWS,
+			"messages/cow/hero",
+			"messages/cow/mechanics"
 	};
 
 	static{
@@ -98,7 +100,8 @@ public class Messages {
 
 		bundles = new ArrayList<>();
 		for (String file : prop_files) {
-			if (bundleLocal.getLanguage().equals("id")){
+			if (bundleLocal.getLanguage().equals("id")
+					&& Gdx.files.internal(file + "_in.properties").exists()){
 				//This is a really silly hack to fix some platforms using "id" for indonesian and some using "in" (Android 14- mostly).
 				//So if we detect "id" then we treat "###_in" as the base bundle so that it gets loaded instead of English.
 				bundles.add(I18NBundle.createBundle(Gdx.files.internal(file + "_in"), bundleLocal));

@@ -397,6 +397,14 @@ public class ItemSpriteSheet {
 
 	                                                                                    //16 free slots
 
+	// 奶牛物品占用原图集预留的第十三行，保持原有物品编号不变。
+	public static final int COW_HORN  = 192;
+	public static final int COW_BELL  = 193;
+	public static final int COW_MILK  = 194;
+	public static final int COW_HIDE  = 195;
+	public static final int COW_ARMOR = 196;
+	public static final int COW_SNACK = 197;
+
 	private static final int WANDS              =                           xy(1, 14);  //16 slots
 	public static final int WAND_MAGIC_MISSILE  = WANDS+0;
 	public static final int WAND_FIREBOLT       = WANDS+1;

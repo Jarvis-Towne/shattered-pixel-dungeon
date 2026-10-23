@@ -98,6 +98,8 @@ public class Assets {
 		public static final String TALENT_BUTTON    = "interfaces/talent_button.png";
 
 		public static final String HERO_ICONS       = "interfaces/hero_icons.png";
+		public static final String COW_ICONS        = "interfaces/cow_icons.png";
+		public static final String COW_PORTRAIT     = "interfaces/cow_portrait.png";
 
 		public static final String RADIAL_MENU      = "interfaces/radial_menu.png";
 
@@ -250,6 +252,7 @@ public class Assets {
 		public static final String HUNTRESS = "splashes/huntress.jpg";
 		public static final String DUELIST  = "splashes/duelist.jpg";
 		public static final String CLERIC   = "splashes/cleric.jpg";
+		public static final String COW      = "splashes/cow.png";
 
 		public static final String SEWERS   = "splashes/sewers.jpg";
 		public static final String PRISON   = "splashes/prison.jpg";
@@ -266,7 +269,7 @@ public class Assets {
 	}
 
 	public static class Sprites {
-		public static final String ITEMS        = "sprites/items.png";
+		public static final String ITEMS        = "sprites/items_cow.png";
 		public static final String ITEM_ICONS   = "sprites/item_icons.png";
 
 		public static final String WARRIOR  = "sprites/warrior.png";
@@ -275,6 +278,8 @@ public class Assets {
 		public static final String HUNTRESS = "sprites/huntress.png";
 		public static final String DUELIST  = "sprites/duelist.png";
 		public static final String CLERIC   = "sprites/cleric.png";
+		public static final String COW      = "sprites/cow.png";
+		public static final String COW_AVATAR = "sprites/cow_avatar.png";
 		public static final String AVATARS  = "sprites/avatars.png";
 		public static final String PET      = "sprites/pet.png";
 		public static final String AMULET   = "sprites/amulet.png";

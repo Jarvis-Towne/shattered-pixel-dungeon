@@ -35,7 +35,8 @@ import java.util.HashMap;
 
 public class GamesInProgress {
 	
-	public static final int MAX_SLOTS = HeroClass.values().length;
+	//可选职业与同时保存的局数独立；保留六个槽位以适配最小横屏布局。
+	public static final int MAX_SLOTS = 6;
 	
 	//null means we have loaded info and it is empty, no entry means unknown.
 	private static HashMap<Integer, Info> slotStates = new HashMap<>();

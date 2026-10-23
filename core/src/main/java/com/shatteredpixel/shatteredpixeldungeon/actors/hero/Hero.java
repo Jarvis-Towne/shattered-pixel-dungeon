@@ -61,6 +61,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.PhysicalEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SnipersMark;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Stubbornness;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.NightShift;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.TimeStasis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
@@ -733,6 +735,8 @@ public class Hero extends Char {
 		if (natStrength != null){
 			speed *= (2f + 0.25f*pointsInTalent(Talent.GROWING_POWER));
 		}
+
+		if (buff(NightShift.class) != null) speed *= 1.5f;
 
 		speed = AscensionChallenge.modifyHeroSpeed(speed);
 		
@@ -1579,7 +1583,7 @@ public class Hero extends Char {
 		default:
 		}
 		
-		return damage;
+		return Stubbornness.onHit(this, enemy, damage);
 	}
 	
 	@Override
@@ -1608,7 +1612,7 @@ public class Hero extends Char {
 			damage = rockArmor.absorb(damage);
 		}
 		
-		return super.defenseProc( enemy, damage );
+		return super.defenseProc( enemy, Stubbornness.defend(this, enemy, damage) );
 	}
 
 	@Override
@@ -1685,6 +1689,8 @@ public class Hero extends Char {
 		int effectiveDamage = preHP - postHP;
 
 		if (effectiveDamage <= 0) return;
+
+		Stubbornness.onDamage(this, src, effectiveDamage);
 
 		if (buff(Challenge.DuelParticipant.class) != null){
 			buff(Challenge.DuelParticipant.class).addDamage(effectiveDamage);
@@ -2330,6 +2336,7 @@ public class Hero extends Char {
 		boolean wasHighGrass = Dungeon.level.map[step] == Terrain.HIGH_GRASS;
 
 		super.move( step, travelling);
+		if (travelling) Stubbornness.onStep(this, wasHighGrass);
 		
 		if (!flying && travelling) {
 			if (Dungeon.level.water[pos]) {

@@ -36,11 +36,15 @@ public class TalentIcon extends Image {
 	}
 
 	public TalentIcon(int icon){
-		super( Assets.Interfaces.TALENT_ICONS );
-
-		if (film == null) film = new TextureFilm(texture, SIZE, SIZE);
-
-		frame(film.get(icon));
+		super( icon >= 256 ? Assets.Interfaces.COW_ICONS : Assets.Interfaces.TALENT_ICONS );
+		if (icon >= 256) {
+			frame(new TextureFilm(texture, SIZE, SIZE).get(icon - 256));
+			//96像素宽的图集产生非二进制UV小数；保持布局尺寸为整数像素。
+			width = height = SIZE;
+		} else {
+			if (film == null) film = new TextureFilm(texture, SIZE, SIZE);
+			frame(film.get(icon));
+		}
 	}
 
 }

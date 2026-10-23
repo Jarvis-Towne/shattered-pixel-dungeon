@@ -50,6 +50,12 @@ public class HeroIcon extends Image {
 	public static final int MONK        = 9;
 	public static final int PRIEST      = 10;
 	public static final int PALADIN     = 11;
+	public static final int COW          = 128;
+	public static final int BULLDOZER    = 129;
+	public static final int HERDGUARD    = 130;
+	public static final int COW_STAMPEDE = 131;
+	public static final int COW_PASTURE_WARD = 132;
+	public static final int COW_MIDNIGHT_SUN = 133;
 
 	//abilities
 	public static final int HEROIC_LEAP     = 16;
@@ -113,36 +119,35 @@ public class HeroIcon extends Image {
 	public static final int WEAPON_SWAP     = 109;
 	public static final int MONK_ABILITIES  = 110;
 
-	public HeroIcon(HeroSubClass subCls){
-		super( Assets.Interfaces.HERO_ICONS );
-		if (film == null){
-			film = new TextureFilm(texture, SIZE, SIZE);
+	private void icon(int index) {
+		if (index >= COW) {
+			texture(Assets.Interfaces.COW_ICONS);
+			frame(new TextureFilm(texture, SIZE, SIZE).get(index - COW));
+			//96像素宽的图集产生非二进制UV小数；保持布局尺寸为整数像素。
+			width = height = SIZE;
+		} else {
+			if (film == null) film = new TextureFilm(texture, SIZE, SIZE);
+			frame(film.get(index));
 		}
-		frame(film.get(subCls.icon()));
 	}
 
-	public HeroIcon(ArmorAbility abil){
-		super( Assets.Interfaces.HERO_ICONS );
-		if (film == null){
-			film = new TextureFilm(texture, SIZE, SIZE);
-		}
-		frame(film.get(abil.icon()));
+	public HeroIcon(HeroSubClass subCls) {
+		super(Assets.Interfaces.HERO_ICONS);
+		icon(subCls.icon());
 	}
 
-	public HeroIcon(ActionIndicator.Action action){
-		super( Assets.Interfaces.HERO_ICONS );
-		if (film == null){
-			film = new TextureFilm(texture, SIZE, SIZE);
-		}
-		frame(film.get(action.actionIcon()));
+	public HeroIcon(ArmorAbility abil) {
+		super(Assets.Interfaces.HERO_ICONS);
+		icon(abil.icon());
 	}
 
-	public HeroIcon(ClericSpell spell){
-		super( Assets.Interfaces.HERO_ICONS );
-		if (film == null){
-			film = new TextureFilm(texture, SIZE, SIZE);
-		}
-		frame(film.get(spell.icon()));
+	public HeroIcon(ActionIndicator.Action action) {
+		super(Assets.Interfaces.HERO_ICONS);
+		icon(action.actionIcon());
 	}
 
+	public HeroIcon(ClericSpell spell) {
+		super(Assets.Interfaces.HERO_ICONS);
+		icon(spell.icon());
+	}
 }

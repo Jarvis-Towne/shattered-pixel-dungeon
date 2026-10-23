@@ -21,17 +21,19 @@ android {
 
         minSdkVersion appAndroidMinSDK
         targetSdkVersion appAndroidTargetSDK
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+    }
+
+    signingConfigs {
+        debug {
+            storeFile rootProject.file('tools/signing/jiangniu-debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
     }
 
     buildTypes {
-        debug {
-            applicationIdSuffix ".indev"
-            versionNameSuffix '-INDEV'
-            dependencies {
-                debugImplementation project(':services:updates:debugUpdates')
-                debugImplementation project(':services:news:debugNews')
-            }
-        }
         release {
 
             //These lines enable R8, which is a code shrinker/optimizer/obfuscator.
@@ -41,11 +43,6 @@ android {
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
-            dependencies {
-                releaseImplementation project(':services:updates:githubUpdates')
-                releaseImplementation project(':services:news:shatteredNews')
-            }
         }
     }
 
@@ -60,6 +57,10 @@ configurations { natives }
 
 dependencies {
     implementation project(':core')
+    debugImplementation project(':services:updates:debugUpdates')
+    debugImplementation project(':services:news:debugNews')
+    releaseImplementation project(':services:updates:githubUpdates')
+    releaseImplementation project(':services:news:shatteredNews')
 
     implementation "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
     natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
@@ -72,6 +73,10 @@ dependencies {
     natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
     natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
     implementation "com.badlogicgames.gdx-controllers:gdx-controllers-android:$gdxControllersVersion"
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.test:rules:1.6.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.3.0'
 }
 
 // called every time gradle gets executed, takes the native dependencies of

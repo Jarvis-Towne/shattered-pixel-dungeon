@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Greatsword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.OxHorn;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -94,6 +95,10 @@ public class VaultMirror extends NPC {
 					reward = new HolyTome().upgrade(8).identify(false);
 					((HolyTome) reward).directCharge(8);
 					break;
+				case COW:
+					reward = new OxHorn().upgrade(3).identify(false);
+					((OxHorn) reward).enchant();
+					break;
 			}
 		Random.popGenerator();
 	}
@@ -125,6 +130,9 @@ public class VaultMirror extends NPC {
 								break;
 							case CLERIC:
 								sceneText += Messages.get(VaultMirror.class, "scene_cleric");
+								break;
+							case COW:
+								sceneText += Messages.get(VaultMirror.class, "scene_cow");
 								break;
 						}
 						sceneText += "\n\n" + Messages.get(VaultMirror.class, "scene_final");

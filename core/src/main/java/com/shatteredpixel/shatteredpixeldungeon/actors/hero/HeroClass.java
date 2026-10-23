@@ -27,7 +27,16 @@ import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.QuickSlot;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Stubbornness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.cow.Stampede;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.cow.PastureWard;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.cow.MidnightSun;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.CowhideArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CowBell;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.WarmMilk;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.OxHorn;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.cleric.AscendedForm;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.cleric.PowerOfMany;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.cleric.Trinity;
@@ -89,7 +98,8 @@ public enum HeroClass {
 	ROGUE( HeroSubClass.ASSASSIN, HeroSubClass.FREERUNNER ),
 	HUNTRESS( HeroSubClass.SNIPER, HeroSubClass.WARDEN ),
 	DUELIST( HeroSubClass.CHAMPION, HeroSubClass.MONK ),
-	CLERIC( HeroSubClass.PRIEST, HeroSubClass.PALADIN );
+	CLERIC( HeroSubClass.PRIEST, HeroSubClass.PALADIN ),
+	COW( HeroSubClass.BULLDOZER, HeroSubClass.HERDGUARD );
 
 	private HeroSubClass[] subClasses;
 
@@ -140,6 +150,10 @@ public enum HeroClass {
 			case CLERIC:
 				initCleric( hero );
 				break;
+
+			case COW:
+				initCow( hero );
+				break;
 		}
 
 		if (SPDSettings.quickslotWaterskin()) {
@@ -167,6 +181,8 @@ public enum HeroClass {
 				return Badges.Badge.MASTERY_DUELIST;
 			case CLERIC:
 				return Badges.Badge.MASTERY_CLERIC;
+			case COW:
+				return Badges.Badge.MASTERY_COW;
 		}
 		return null;
 	}
@@ -260,6 +276,30 @@ public enum HeroClass {
 		new ScrollOfRemoveCurse().identify();
 	}
 
+	private static void initCow( Hero hero ) {
+		(hero.belongings.weapon = new OxHorn()).identify();
+		hero.belongings.weapon.activate(hero);
+
+		CowhideArmor hide = new CowhideArmor();
+		if (!Challenges.isItemBlocked(hide)) {
+			hero.belongings.armor = hide;
+			hide.identify();
+		}
+
+		CowBell bell = new CowBell();
+		bell.identify().collect();
+		Dungeon.quickslot.setSlot(0, bell);
+
+		WarmMilk milk = new WarmMilk();
+		if (!Challenges.isItemBlocked(milk)) {
+			milk.identify().collect();
+			Dungeon.quickslot.setSlot(1, milk);
+		}
+		Buff.affect(hero, Stubbornness.class);
+		new PotionOfHealing().identify();
+		new ScrollOfRage().identify();
+	}
+
 	public String title() {
 		return Messages.get(HeroClass.class, name());
 	}
@@ -290,6 +330,8 @@ public enum HeroClass {
 				return new ArmorAbility[]{new Challenge(), new ElementalStrike(), new Feint()};
 			case CLERIC:
 				return new ArmorAbility[]{new AscendedForm(), new Trinity(), new PowerOfMany()};
+			case COW:
+				return new ArmorAbility[]{new Stampede(), new PastureWard(), new MidnightSun()};
 		}
 	}
 
@@ -307,6 +349,8 @@ public enum HeroClass {
 				return Assets.Sprites.DUELIST;
 			case CLERIC:
 				return Assets.Sprites.CLERIC;
+			case COW:
+				return Assets.Sprites.COW;
 		}
 	}
 
@@ -324,6 +368,8 @@ public enum HeroClass {
 				return Assets.Splashes.DUELIST;
 			case CLERIC:
 				return Assets.Splashes.CLERIC;
+			case COW:
+				return Assets.Splashes.COW;
 		}
 	}
 	
@@ -332,7 +378,7 @@ public enum HeroClass {
 		if (DeviceCompat.isDebug()) return true;
 
 		switch (this){
-			case WARRIOR: default:
+			case WARRIOR: case COW: default:
 				return true;
 			case MAGE:
 				return Badges.isUnlocked(Badges.Badge.UNLOCK_MAGE);

@@ -92,6 +92,8 @@ public abstract class RemainsItem extends Item {
 				return new BrokenHilt();
 			case CLERIC:
 				return new TornPage();
+			case COW:
+				return new CrackedBell();
 		}
 	}
 
