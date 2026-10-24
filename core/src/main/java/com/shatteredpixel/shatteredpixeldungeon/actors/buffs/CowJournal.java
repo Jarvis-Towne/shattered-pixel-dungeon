@@ -10,9 +10,11 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfBullishResolve;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfMindVision;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfCowCouncil;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MeadowCake;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.WarmMilk;
@@ -69,12 +71,12 @@ public class CowJournal extends Buff {
         Stubbornness resolve = hero.buff(Stubbornness.class);
         switch (entry) {
             case 0: Buff.prolong(hero, Haste.class, 3f); break;
-            case 1: grantItem(hero, new ScrollOfMagicMapping()); break;
+            case 1: grantItem(hero, new ScrollOfCowCouncil()); break;
             case 2: if (resolve != null) resolve.gain(2); break;
             case 3: Buff.affect(hero, CowGuard.class).set(2, 3); break;
             case 4: Buff.prolong(hero, Bless.class, 4f); break;
             case 5: grantItem(hero, new MeadowCake()); break;
-            case 6: if (resolve != null) resolve.gain(2); break;
+            case 6: grantItem(hero, new PotionOfBullishResolve()); break;
             case 7: Buff.prolong(hero, Bless.class, 4f); break;
             case 8: grantItem(hero, new PotionOfHealing()); break;
             case 9: Buff.prolong(hero, Recharging.class, 4f); break;
