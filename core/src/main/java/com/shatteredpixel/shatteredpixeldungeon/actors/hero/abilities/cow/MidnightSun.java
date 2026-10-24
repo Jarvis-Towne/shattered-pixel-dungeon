@@ -31,7 +31,8 @@ public class MidnightSun extends ArmorAbility {
     public static float duration(Hero hero) {
         return 8f + 2f*hero.pointsInTalent(Talent.COW_LONG_NIGHT)
                 + (CowCraft.rank(hero, CowCraft.NIGHT) >= 2 ? 2f : 0f)
-                + (CowCraft.rank(hero, CowCraft.NIGHT) >= 3 ? 3f : 0f);
+                + (CowCraft.rank(hero, CowCraft.NIGHT) >= 3 ? 3f : 0f)
+                + CowCraft.growth(hero, CowCraft.NIGHT);
     }
     @Override protected void activate(ClassArmor armor, Hero hero, Integer target) {
         if (armor == null || hero == null || !hero.isAlive() || hero.paralysed > 0

@@ -30,7 +30,7 @@ public class Stampede extends ArmorAbility {
     { baseChargeUse = 35f; }
     @Override public String targetingPrompt() { return Messages.get(this, "prompt"); }
     public static int range(Hero hero) { return 5 + hero.pointsInTalent(Talent.COW_LONG_RUSH); }
-    public static int damage(Hero hero) { return Math.round((10 + hero.lvl)*(1f + 0.15f*hero.pointsInTalent(Talent.COW_THUNDER_HOOVES))); }
+    public static int damage(Hero hero) { return Math.round((10 + hero.lvl + CowCraft.growth(hero, CowCraft.STAMPEDE))*(1f + 0.15f*hero.pointsInTalent(Talent.COW_THUNDER_HOOVES))); }
 
     @Override protected void activate(ClassArmor armor, Hero hero, Integer target) {
         if (target == null || armor == null || hero == null || !hero.isAlive()

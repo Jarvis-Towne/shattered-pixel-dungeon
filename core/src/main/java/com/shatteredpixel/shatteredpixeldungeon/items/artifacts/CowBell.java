@@ -107,7 +107,7 @@ public class CowBell extends Item {
     }
     public static int impactDamage(Hero hero, int travelled) {
         int damage = 4 + hero.lvl + Math.max(0, travelled)*2
-                + (CowBellMastery.rank(hero) >= 1 ? 2 : 0);
+                + (CowBellMastery.rank(hero) >= 1 ? 2 : 0) + CowBellMastery.growth(hero);
         return hero.subClass == HeroSubClass.BULLDOZER ? Math.round(damage*1.25f) : damage;
     }
 
@@ -212,6 +212,7 @@ public class CowBell extends Item {
         int mastery = CowBellMastery.rank(hero);
         int radius = mastery >= 3 ? 2 : 1;
         int talent = hero.pointsInTalent(Talent.COW_EARTHSHAKER);
+        int bellGrowth = CowBellMastery.growth(hero)/2;
         for (Char enemy : new ArrayList<>(Actor.chars())) {
             if (!hero.isAlive() || Dungeon.level != level) break;
             int distance = level.distance(hero.pos, enemy.pos);
@@ -219,7 +220,7 @@ public class CowBell extends Item {
                     && (distance <= 1 || new Ballistica(hero.pos, enemy.pos,
                     Ballistica.STOP_TARGET | Ballistica.STOP_SOLID).collisionPos == enemy.pos)) {
                 int before = enemy.HP + enemy.shielding();
-                int base = 3 + hero.lvl/2 + 2*talent;
+                int base = 3 + hero.lvl/2 + 2*talent + bellGrowth;
                 // The mastered two-tile ring hits at half strength and never grants extra resolve.
                 if (distance > 1) base = Math.max(1, base/2);
                 enemy.damage(Math.max(1, base - enemy.drRoll()), hero);

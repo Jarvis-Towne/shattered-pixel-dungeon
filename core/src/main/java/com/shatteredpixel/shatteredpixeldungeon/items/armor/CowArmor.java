@@ -16,6 +16,30 @@ public class CowArmor extends ClassArmor {
         tier = Math.max(tier, Math.min(4, Math.max(0, stage) + 1));
     }
 
+    private int smooth() {
+        Hero hero = Dungeon.hero;
+        return hero != null && hero.belongings.contains(this) ? CowLegend.growth(hero) : 0;
+    }
+
+    private int ownerStage() {
+        Hero hero = Dungeon.hero;
+        return hero != null && hero.belongings.contains(this) ? CowLegend.stage(hero) : 0;
+    }
+
+    @Override public int STRReq(int level) {
+        return Math.max(0, super.STRReq(level) - 2*ownerStage());
+    }
+
+    @Override public int DRMax(int level) {
+        return super.DRMax(level) +
+                (Dungeon.isChallenged(com.shatteredpixel.shatteredpixeldungeon.Challenges.NO_ARMOR) ? 0 : smooth());
+    }
+
+    @Override public int DRMin(int level) {
+        return Math.min(DRMax(level), super.DRMin(level) +
+                (Dungeon.isChallenged(com.shatteredpixel.shatteredpixeldungeon.Challenges.NO_ARMOR) ? 0 : smooth()/2));
+    }
+
     @Override public boolean doUnequip(Hero hero, boolean collect, boolean single) {
         if (!super.doUnequip(hero, collect, single)) return false;
         CowLegend legend = hero.buff(CowLegend.class);

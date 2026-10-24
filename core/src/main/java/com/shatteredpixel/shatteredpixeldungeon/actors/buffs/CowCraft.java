@@ -34,13 +34,19 @@ public class CowCraft extends Buff {
         return count >= 12 ? 3 : count >= 7 ? 2 : count >= 3 ? 1 : 0;
     }
 
+    /** Independent, non-capped smooth skill progression after the final named rank. */
+    public static int growth(Hero hero, int skill) {
+        int count = uses(hero, skill);
+        return (int)Math.round(Math.sqrt(1.0 + count/4.0) - 1.0);
+    }
+
     /** Each effective activation earns practice once, regardless of the number of targets. */
     public static void record(Hero hero, int skill, boolean effective) {
         if (!effective || hero == null || !hero.isAlive() || hero.heroClass != HeroClass.COW
                 || !validSkill(skill)) return;
         CowCraft craft = Buff.affect(hero, CowCraft.class);
         int oldRank = rank(hero, skill);
-        craft.uses[skill] = Math.min(12, craft.uses[skill] + 1);
+        if (craft.uses[skill] < Integer.MAX_VALUE) craft.uses[skill]++;
         CowLegend.recordArmorAbility(hero);
         if (rank(hero, skill) > oldRank && hero.sprite != null) {
             GLog.p(Messages.get(CowCraft.class, "practiced", Messages.get(CowCraft.class, "skill_" + skill)));
@@ -70,6 +76,6 @@ public class CowCraft extends Buff {
 
     @Override public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
-        for (int i = 0; i < uses.length; i++) uses[i] = Math.max(0, Math.min(12, bundle.getInt("cow_practice_" + i)));
+        for (int i = 0; i < uses.length; i++) uses[i] = Math.max(0, bundle.getInt("cow_practice_" + i));
     }
 }

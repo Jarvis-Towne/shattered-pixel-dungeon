@@ -73,7 +73,7 @@ public class Stubbornness extends Buff {
         CowRush rush = hero.buff(CowRush.class);
         if (rush != null) damage += rush.consume(hero);
         NightShift night = hero.buff(NightShift.class);
-        if (night != null) damage += 1 + hero.pointsInTalent(Talent.COW_SOLAR_FLARE);
+        if (night != null) damage += 1 + hero.pointsInTalent(Talent.COW_SOLAR_FLARE) + CowCraft.growth(hero, CowCraft.NIGHT)/2;
         // Import an older hit counter before this attack changes it. Actual new practice
         // is credited by Hero.attack only after damage has really reduced HP or shielding.
         CowLegend.get(hero);

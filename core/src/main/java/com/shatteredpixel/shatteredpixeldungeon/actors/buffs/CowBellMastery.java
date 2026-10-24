@@ -31,10 +31,14 @@ public class CowBellMastery extends Buff {
         if (enemiesHit <= 0 || hero == null || !hero.isAlive() || hero.heroClass != HeroClass.COW) return;
         int previous = rank(hero);
         CowBellMastery mastery = Buff.affect(hero, CowBellMastery.class);
-        mastery.successfulCasts = Math.min(15, mastery.successfulCasts + 1);
+        if (mastery.successfulCasts < Integer.MAX_VALUE) mastery.successfulCasts++;
         if (rank(hero) > previous && hero.sprite != null) {
             GLog.p(Messages.get(CowBellMastery.class, "evolved", rank(hero)));
         }
+    }
+
+    public static int growth(Hero hero) {
+        return (int)Math.round(1.3 * (Math.sqrt(1 + uses(hero)/5.0) - 1));
     }
 
     /** Depth is indexed across branches, preventing branch-switch or return-trip farming. */
@@ -72,7 +76,7 @@ public class CowBellMastery extends Buff {
 
     @Override public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
-        successfulCasts = Math.max(0, Math.min(15, bundle.getInt("cow_bell_mastery_uses")));
+        successfulCasts = Math.max(0, bundle.getInt("cow_bell_mastery_uses"));
         drawnDepths = bundle.getInt("cow_bell_drawn_depths") & 0x7ffffffe;
     }
 }

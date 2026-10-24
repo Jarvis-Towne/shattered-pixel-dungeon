@@ -30,14 +30,10 @@ public class OxHorn extends MeleeWeapon {
         unique = true;
         bones = false;
     }
-    /** Stage changes the actual weapon tier, strength requirement and upgrade scaling.
-     * The same item is retained: enchantment, augment, upgrades and saved hit rhythm survive. */
+    /** Only game mechanics evolve. The original exclusive artwork never changes. */
     public void evolveTo(int stage) {
-        int form = Math.min(3, Math.max(0, stage));
-        tier = Math.max(tier, form + 1);
-        // Reuse existing pixel art so each forged form is visually recognizable.
-        image = form == 0 ? ItemSpriteSheet.COW_HORN : form == 1 ? ItemSpriteSheet.MACE
-                : form == 2 ? ItemSpriteSheet.BATTLE_AXE : ItemSpriteSheet.WAR_HAMMER;
+        tier = Math.max(tier, Math.min(3, Math.max(0, stage)) + 1);
+        image = ItemSpriteSheet.COW_HORN;
     }
 
     @Override public boolean doEquip(Hero hero) {
@@ -49,8 +45,20 @@ public class OxHorn extends MeleeWeapon {
         return Dungeon.hero != null && Dungeon.hero.belongings.contains(this) ? CowLegend.stage(Dungeon.hero) : 0;
     }
 
-    @Override public int min(int level) { return tier + 1 + level; }
-    @Override public int max(int level) { return 4*(tier + 1) + (tier + 1)*level; }
+    private int smooth() {
+        Hero hero = Dungeon.hero;
+        return hero != null && hero.belongings.contains(this) ? CowLegend.growth(hero) : 0;
+    }
+
+    /** Stage-specific damage jump + continuous practice progression between stages. */
+    @Override public int min(int level) { return tier + 1 + level + smooth(); }
+    @Override public int max(int level) { return 4*(tier + 1) + (tier + 1)*level + 2*smooth(); }
+
+    /** This heirloom grows into higher tiers without suddenly overburdening its user.
+     * From the first turn the unupgraded strength requirement is ten, not twelve. */
+    @Override public int STRReq(int level) {
+        return Math.max(0, super.STRReq(level) - 2*ownerStage());
+    }
 
     @Override public int proc(Char attacker, Char defender, int damage) {
         if (attacker instanceof Hero && ((Hero)attacker).heroClass == HeroClass.COW
@@ -103,5 +111,6 @@ public class OxHorn extends MeleeWeapon {
     @Override public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
         argumentHits = Math.max(0, bundle.getInt("cow_argument_hits")) % 3;
+        image = ItemSpriteSheet.COW_HORN;
     }
 }

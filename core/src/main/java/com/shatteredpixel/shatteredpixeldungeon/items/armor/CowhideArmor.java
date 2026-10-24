@@ -13,17 +13,34 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 public class CowhideArmor extends ClothArmor {
     { image = ItemSpriteSheet.COW_HIDE; unique = true; bones = false; }
 
-    /** Actual armor tier evolves with the cow; glyphs and scroll upgrades remain intact. */
+    /** Keep the original exclusive apron illustration for every evolutionary form. */
     public void evolveTo(int stage) {
-        int form = Math.min(3, Math.max(0, stage));
-        tier = Math.max(tier, form + 1);
-        image = form == 0 ? ItemSpriteSheet.COW_HIDE : form == 1 ? ItemSpriteSheet.ARMOR_LEATHER
-                : form == 2 ? ItemSpriteSheet.ARMOR_SCALE : ItemSpriteSheet.COW_ARMOR;
+        tier = Math.max(tier, Math.min(3, Math.max(0, stage)) + 1);
+        image = ItemSpriteSheet.COW_HIDE;
     }
 
     @Override public boolean doEquip(Hero hero) {
         if (hero != null && hero.heroClass == HeroClass.COW) evolveTo(CowLegend.stage(hero));
         return super.doEquip(hero);
+    }
+
+    private int smooth() {
+        Hero hero = Dungeon.hero;
+        return hero != null && hero.belongings.contains(this) ? CowLegend.growth(hero) : 0;
+    }
+
+    @Override public int STRReq(int level) {
+        return Math.max(0, super.STRReq(level) - 2*ownerStage());
+    }
+
+    @Override public int DRMax(int level) {
+        return super.DRMax(level) +
+                (Dungeon.isChallenged(com.shatteredpixel.shatteredpixeldungeon.Challenges.NO_ARMOR) ? 0 : smooth());
+    }
+
+    @Override public int DRMin(int level) {
+        return Math.min(DRMax(level), super.DRMin(level) +
+                (Dungeon.isChallenged(com.shatteredpixel.shatteredpixeldungeon.Challenges.NO_ARMOR) ? 0 : smooth()/2));
     }
 
     @Override public boolean doUnequip(Hero hero, boolean collect, boolean single) {

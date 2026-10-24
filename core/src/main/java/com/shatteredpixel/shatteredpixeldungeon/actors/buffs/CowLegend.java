@@ -14,13 +14,12 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Image;
 import com.watabou.utils.Bundle;
 
-/** Shared, finite practice progress. Merely waiting or inspecting equipment never earns practice. */
+/** Shared practice: continuous diminishing-return power, discrete form unlocks.
+ * No gameplay progress cap; idle turns and inventory preview never earn points. */
 public class CowLegend extends Buff {
     private static final int[] PRACTICE = {0, 12, 40, 90};
     private static final int[] LEVELS = {1, 3, 8, 14};
-    public static final int MAX_POINTS = 999;
-
-    private int points;
+    private long points;
     private int announcedStage;
     private int blame;
     private int guardCooldown;
@@ -47,7 +46,20 @@ public class CowLegend extends Buff {
         return legend == null ? 0 : legend.stage();
     }
 
-    public int points() { return points; }
+    public long points() { return points; }
+
+    /** Smooth monotonic unbounded curve, rounded only when converting to integer combat stats.
+     * This is independent of the tier/ability unlock thresholds. Read-only. */
+    public static int growth(long practice) {
+        double power = 2.0 * (Math.sqrt(1.0 + Math.max(0L, practice)/12.0) - 1.0);
+        return (int)Math.min(Integer.MAX_VALUE/16d, Math.round(power));
+    }
+
+    public static int growth(Hero hero) {
+        if (hero == null || hero.heroClass != HeroClass.COW) return 0;
+        CowLegend current = hero.buff(CowLegend.class);
+        return current == null ? 0 : growth(current.points);
+    }
     public int blame() { return blame; }
     public int guardCooldown() { return guardCooldown; }
     public void clearBlame() { blame = 0; BuffIndicator.refreshHero(); }
@@ -63,7 +75,7 @@ public class CowLegend extends Buff {
 
     public void addPoints(int amount) {
         if (amount <= 0 || !(target instanceof Hero) || ((Hero) target).heroClass != HeroClass.COW) return;
-        points += Math.min(amount, MAX_POINTS - points);
+        points = points > Long.MAX_VALUE - amount ? Long.MAX_VALUE : points + amount;
         announceEvolution();
         Item.updateQuickslot();
         BuffIndicator.refreshHero();
@@ -71,7 +83,7 @@ public class CowLegend extends Buff {
 
     /** Used once when an older Stubbornness save is first opened. No replayed rewards. */
     void importPractice(int oldHits) {
-        points = Math.max(points, Math.min(MAX_POINTS, Math.max(0, oldHits)));
+        points = Math.max(points, Math.max(0, oldHits));
     }
 
     private static boolean realEnemy(Char enemy) {
@@ -176,8 +188,8 @@ public class CowLegend extends Buff {
     public String progress() {
         int current = stage();
         String name = Messages.get(this, "stage_" + current);
-        if (current == 3) return Messages.get(this, "complete", name, points, MAX_POINTS);
-        return Messages.get(this, "progress", name, points, PRACTICE[current + 1], LEVELS[current + 1]);
+        if (current == 3) return Messages.get(this, "complete", name, points, growth(points));
+        return Messages.get(this, "progress", name, points, PRACTICE[current + 1], LEVELS[current + 1], growth(points));
     }
 
     @Override public boolean act() {
@@ -209,7 +221,8 @@ public class CowLegend extends Buff {
 
     @Override public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
-        points = Math.max(0, Math.min(MAX_POINTS, bundle.getInt("cow_practice")));
+        // optLong also reads the old v1.1/v1.2 int field without resetting progress.
+        points = Math.max(0L, bundle.getLong("cow_practice"));
         announcedStage = Math.max(0, Math.min(3, bundle.getInt("cow_stage_announced")));
         blame = Math.max(0, Math.min(4, bundle.getInt("cow_blame")));
         guardCooldown = Math.max(0, Math.min(8, bundle.getInt("cow_blame_guard_cd")));

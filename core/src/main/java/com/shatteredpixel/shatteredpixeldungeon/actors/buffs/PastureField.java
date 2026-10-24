@@ -29,10 +29,11 @@ public class PastureField extends Buff {
         depth = Dungeon.depth;
         branch = Dungeon.branch;
         int wide = hero.pointsInTalent(Talent.COW_WIDE_PASTURE);
-        turns = 8 + 2*wide;
+        turns = 8 + 2*wide + CowCraft.growth(hero, CowCraft.PASTURE)/2;
         mastery = CowCraft.rank(hero, CowCraft.PASTURE);
         radius = 2 + wide/2 + (mastery >= 3 ? 1 : 0);
-        shieldCap = 8 + hero.lvl/2 + (mastery >= 1 ? 2 : 0) + (mastery >= 3 ? 3 : 0);
+        shieldCap = 8 + hero.lvl/2 + (mastery >= 1 ? 2 : 0) + (mastery >= 3 ? 3 : 0)
+                + CowCraft.growth(hero, CowCraft.PASTURE);
         pulses = 0;
         practiced = false;
         restoredFooting = false;
