@@ -286,6 +286,7 @@ public class CowBellEvolutionTest {
 
     @Test public void bellMasteryUnlocksRangeAndOneDrawPerVisitedDepth() {
         evolve(8, 40);
+        CowBell bell = new CowBell();
         assertEquals(3, CowBell.range(hero));
         assertFalse(bell.actions(hero).contains(CowBell.AC_DRAW));
         for (int i = 0; i < 3; i++) CowBellMastery.record(hero, 1);

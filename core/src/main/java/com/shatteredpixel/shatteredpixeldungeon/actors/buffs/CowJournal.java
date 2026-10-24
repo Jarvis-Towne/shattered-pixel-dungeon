@@ -86,7 +86,8 @@ public class CowJournal extends Buff {
             case 17: Buff.affect(hero, CowGuard.class).set(2, 3); break;
         }
         // Very difficult complete-album bonus; awarded once, never on save restoration.
-        if (count() == TOTAL) grantItem(hero, new PotionOfStrength());
+        CowJournal journal = hero.buff(CowJournal.class);
+        if (journal != null && journal.count() == TOTAL) grantItem(hero, new PotionOfStrength());
     }
 
     public boolean discover(Hero hero, int entry) {

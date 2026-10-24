@@ -53,6 +53,7 @@ public class CowGearEvolutionTest {
         legend.addPoints(50);
         assertEquals(2, legend.stage());
         hero.lvl = 14;
+        legend.act(); // real game refreshes equipment in the buff tick after leveling
         assertEquals(3, legend.stage());
         // Evolution now upgrades the actual equipment tier, not just its display name.
         assertEquals(4, ((OxHorn) hero.belongings.weapon).tier);

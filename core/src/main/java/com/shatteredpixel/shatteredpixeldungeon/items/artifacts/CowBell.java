@@ -215,7 +215,9 @@ public class CowBell extends Item {
         for (Char enemy : new ArrayList<>(Actor.chars())) {
             if (!hero.isAlive() || Dungeon.level != level) break;
             int distance = level.distance(hero.pos, enemy.pos);
-            if (enemy.alignment == Char.Alignment.ENEMY && enemy.isAlive() && distance <= radius) {
+            if (enemy.alignment == Char.Alignment.ENEMY && enemy.isAlive() && distance <= radius
+                    && (distance <= 1 || new Ballistica(hero.pos, enemy.pos,
+                    Ballistica.STOP_TARGET | Ballistica.STOP_SOLID).collisionPos == enemy.pos)) {
                 int before = enemy.HP + enemy.shielding();
                 int base = 3 + hero.lvl/2 + 2*talent;
                 // The mastered two-tile ring hits at half strength and never grants extra resolve.
