@@ -15,9 +15,9 @@ allprojects {
         appPackageName = 'com.jarvistowne.jiangniu'
 
         //Full releases gets +2 on version code, needed for an F-Droid quirk
-        appVersionCode = 1200
+        appVersionCode = 1300
         // 游戏内版本栏使用 ASCII 像素字体；中文体验版说明放在应用名与发布文档。
-        appVersionName = '4.0.2-1.2.0'
+        appVersionName = '4.0.2-1.3.0'
 
         appJavaCompatibility = JavaVersion.VERSION_11
 

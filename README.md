@@ -2,6 +2,16 @@
 
 > 桌面上那个总在皱眉的「牛哞」，带着围兜和一肚子意见进地牢了。基于 [Shattered Pixel Dungeon 4.0.2](https://github.com/00-Evan/shattered-pixel-dungeon) 的中文同人扩展，保留原版六名英雄，新增开局即可选择的第七英雄 **「犟牛」**。
 
+## v1.3.0：保留专属美术，成长更平滑，进阶更鲜明
+
+[**v1.3.0 源码**](https://github.com/Jarvis-Towne/shattered-pixel-dungeon/tree/jiangniu-v1.3.0) · [**最新 APK 发布页面**](https://github.com/Jarvis-Towne/shattered-pixel-dungeon/releases/tag/jiangniu-v1.3.0-apk) · [完整玩法与数值公式](docs/jiangniu-v1.3.0-guide.md) · [更新日志](docs/jiangniu-v1.3.0-release-notes.md) · [CI 自动构建](https://github.com/Jarvis-Towne/shattered-pixel-dungeon/actions/workflows/build-jiangniu-apk.yml)
+
+v1.3.0 纠正了此前进阶随意替换专武/专甲图标的问题：所有成长阶段始终使用原有独家美术。新增 **“连续历练平滑增加攻防 + 12/40/90历练阶梯性提升装备阶级与特殊效果”** 的双轨进化；删除999历练封顶和12/15次技能次数截断，未强化专属武器/护甲在所有进阶阶段均不会突然从10力量需求升至12。牛棚盲盒增加新药水、新卷轴与一个有专属战利品的风险型随机怪物事件。
+
+**注意：此页 v1.3.0 下载链接仅在 GitHub Actions 测试、打包与发布成功后有效。** 旧版 v1.2.0、v1.1.0 仍保留，可安全回退；覆盖安装之前建议备份存档。
+
+---
+
 ## v1.2.0 开发版：武器变形，牛棚抽奖，彩蛋有奖励
 
 在 [`jiangniu-v1.2.0` 源码分支](https://github.com/Jarvis-Towne/shattered-pixel-dungeon/tree/jiangniu-v1.2.0) 上继续开发；[CI 测试与自动 APK 发布](https://github.com/Jarvis-Towne/shattered-pixel-dungeon/actions/workflows/build-jiangniu-apk.yml) · [新版玩法指南](docs/jiangniu-v1.2.0-guide.md) · [v1.2.0 更新日志](docs/jiangniu-v1.2.0-release-notes.md)。
