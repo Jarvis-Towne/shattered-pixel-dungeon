@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.shatteredpixel.shatteredpixeldungeon.CowBellEvolutionTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-24T01:11:31.789Z" hostname="f3284b334e2d" time="0.025">
+  <properties/>
+  <testcase name="firstEvolutionNeedsTravelAndNeverDisplacesBossIntoHazards" classname="com.shatteredpixel.shatteredpixeldungeon.CowBellEvolutionTest" time="0.01"/>
+  <testcase name="emptyStompAndRepeatedActionsCannotFarmPracticeOrComboBonuses" classname="com.shatteredpixel.shatteredpixeldungeon.CowBellEvolutionTest" time="0.002"/>
+  <testcase name="menuRequiresBothStageGatesAndGuideDoesNotCreateOrAdvanceProgress" classname="com.shatteredpixel.shatteredpixeldungeon.CowBellEvolutionTest" time="0.002"/>
+  <testcase name="absentAudienceLockedStageDisabledHeroAndInsufficientResolveDoNotSpendTime" classname="com.shatteredpixel.shatteredpixeldungeon.CowBellEvolutionTest" time="0.001"/>
+  <testcase name="chargeThenStompAddsOnlyTwoShieldAndStillPaysForBothActions" classname="com.shatteredpixel.shatteredpixeldungeon.CowBellEvolutionTest" time="0.001"/>
+  <testcase name="invulnerableTargetsDoNotFarmPracticeOrReceiveShoutWeakness" classname="com.shatteredpixel.shatteredpixeldungeon.CowBellEvolutionTest" time="0.001"/>
+  <testcase name="stompThenChargeAddsOnlyTwoDamageAndConsumesTheWindow" classname="com.shatteredpixel.shatteredpixeldungeon.CowBellEvolutionTest" time="0.001"/>
+  <testcase name="debateRespectsRangeSightWallsAlliesAndBossDurationWithoutRefundingResolve" classname="com.shatteredpixel.shatteredpixeldungeon.CowBellEvolutionTest" time="0.001"/>
+  <testcase name="evolvedChargeStillRejectsWallsPitsAndAlliesAndCannotPracticeOnInterruptedDash" classname="com.shatteredpixel.shatteredpixeldungeon.CowBellEvolutionTest" time="0.004"/>
+  <testcase name="comboLifetimeAndActionSurviveCompressedSaveButNotExpiryOrOtherFloors" classname="com.shatteredpixel.shatteredpixeldungeon.CowBellEvolutionTest" time="0.002"/>
+  <system-out><![CDATA[[GAME] ** 顶撞需要范围内的可见敌人，以及没有墙壁、深渊或其他生物阻挡的直线路径。
+[GAME] ** 顶撞需要范围内的可见敌人，以及没有墙壁、深渊或其他生物阻挡的直线路径。
+[GAME] ** 顶撞需要范围内的可见敌人，以及没有墙壁、深渊或其他生物阻挡的直线路径。
+[GAME] ** 顶撞需要范围内的可见敌人，以及没有墙壁、深渊或其他生物阻挡的直线路径。
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

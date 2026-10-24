@@ -24,7 +24,7 @@ public class Stubbornness extends Buff {
     private int recoveryCooldown;
     private int grassSteps;
     private int successfulHits;
-    private boolean greeted, meadowFound, convergenceFound;
+    private boolean greeted, meadowFound, convergenceFound, legendMigrated;
 
     {
         type = buffType.POSITIVE;
@@ -37,6 +37,14 @@ public class Stubbornness extends Buff {
     }
 
     public int charge() { return charge; }
+
+    /** The migration flag lives with its source counter so a load never credits old hits twice. */
+    void migrateLegend(CowLegend legend) {
+        if (!legendMigrated) {
+            legendMigrated = true;
+            legend.importPractice(successfulHits);
+        }
+    }
 
     public void gain(int amount) {
         if (!(target instanceof Hero) || amount <= 0) return;
@@ -65,6 +73,10 @@ public class Stubbornness extends Buff {
         if (rush != null) damage += rush.consume(hero);
         NightShift night = hero.buff(NightShift.class);
         if (night != null) damage += 1 + hero.pointsInTalent(Talent.COW_SOLAR_FLARE);
+        // Import an older hit counter before this attack changes it. Actual new practice
+        // is credited by Hero.attack only after damage has really reduced HP or shielding.
+        CowLegend.get(hero);
+        damage = CowLegend.unloadBlame(hero, enemy, damage);
         stubborn.gain(1);
         int resonance = hero.pointsInTalent(Talent.COW_BELL_RESONANCE);
         if (resonance > 0 && ++stubborn.resonantHits >= 4 - resonance) {
@@ -90,6 +102,7 @@ public class Stubbornness extends Buff {
         if (hero.heroClass == HeroClass.COW && hero.isAlive() && actualDamage > 0
                 && source instanceof Char && ((Char)source).alignment == Char.Alignment.ENEMY) {
             Buff.affect(hero, Stubbornness.class).gain(1);
+            CowLegend.recordDamage(hero, source, actualDamage);
         }
     }
 
@@ -132,6 +145,7 @@ public class Stubbornness extends Buff {
     @Override public boolean act() {
         if (!(target instanceof Hero)) { detach(); return true; }
         Hero hero = (Hero)target;
+        CowLegend.get(hero);
         charge = Math.min(charge, capacity(hero));
         if (recoveryCooldown > 0) recoveryCooldown--;
         if (!greeted && hero.sprite != null && Dungeon.depth > 0) {
@@ -160,6 +174,7 @@ public class Stubbornness extends Buff {
         b.put("cow_greeted", greeted);
         b.put("cow_meadow", meadowFound);
         b.put("cow_convergence", convergenceFound);
+        b.put("cow_legend_migrated", legendMigrated);
     }
 
     @Override public void restoreFromBundle(Bundle b) {
@@ -172,5 +187,6 @@ public class Stubbornness extends Buff {
         greeted = b.getBoolean("cow_greeted");
         meadowFound = b.getBoolean("cow_meadow");
         convergenceFound = b.getBoolean("cow_convergence");
+        legendMigrated = b.getBoolean("cow_legend_migrated");
     }
 }

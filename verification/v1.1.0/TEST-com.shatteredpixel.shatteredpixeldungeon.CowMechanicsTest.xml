@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.shatteredpixel.shatteredpixeldungeon.CowMechanicsTest" tests="16" skipped="0" failures="0" errors="0" timestamp="2026-10-24T01:11:31.857Z" hostname="f3284b334e2d" time="0.015">
+  <properties/>
+  <testcase name="nonCowAndParalyzedHeroesCannotUseBellStaticEntrypoints" classname="com.shatteredpixel.shatteredpixeldungeon.CowMechanicsTest" time="0.001"/>
+  <testcase name="newlySummonedOccupantStopsChargeBeforeActorOverlap" classname="com.shatteredpixel.shatteredpixeldungeon.CowMechanicsTest" time="0.0"/>
+  <testcase name="chargeReserveAndOneTimeDiscoveriesSurviveActualCompressedSave" classname="com.shatteredpixel.shatteredpixeldungeon.CowMechanicsTest" time="0.001"/>
+  <testcase name="guardDoesNotStackAndItsRemainingLifetimeSurvivesSave" classname="com.shatteredpixel.shatteredpixeldungeon.CowMechanicsTest" time="0.001"/>
+  <testcase name="onlyRealHostileCombatBuildsResolve" classname="com.shatteredpixel.shatteredpixeldungeon.CowMechanicsTest" time="0.0"/>
+  <testcase name="pastureAnchorsAtCastPositionRespectsWallsAndExpiresAcrossFloors" classname="com.shatteredpixel.shatteredpixeldungeon.CowMechanicsTest" time="0.001"/>
+  <testcase name="midnightShiftSpendsArmorChargeAddsFiniteResolveAndDamageBuff" classname="com.shatteredpixel.shatteredpixeldungeon.CowMechanicsTest" time="0.001"/>
+  <testcase name="stampedePiercesEnemiesStopsAtWallsAndDebitsRealArmorCharge" classname="com.shatteredpixel.shatteredpixeldungeon.CowMechanicsTest" time="0.001"/>
+  <testcase name="validChargeMovesAdjacentPressesEveryTileDealsDamageAndSpendsOneTurn" classname="com.shatteredpixel.shatteredpixeldungeon.CowMechanicsTest" time="0.001"/>
+  <testcase name="terrainControlInterruptsChargeWithoutHittingDistantEnemy" classname="com.shatteredpixel.shatteredpixeldungeon.CowMechanicsTest" time="0.0"/>
+  <testcase name="stompDamagesEnemiesProtectsAlliesConsumesChargeAndClearsTalentedRoots" classname="com.shatteredpixel.shatteredpixeldungeon.CowMechanicsTest" time="0.002"/>
+  <testcase name="invalidTargetsWallsPitsAndAlliesNeverSpendChargeOrTime" classname="com.shatteredpixel.shatteredpixeldungeon.CowMechanicsTest" time="0.002"/>
+  <testcase name="bulldozerGetsOneConsumableFollowUpAndHerdguardGetsShelter" classname="com.shatteredpixel.shatteredpixeldungeon.CowMechanicsTest" time="0.001"/>
+  <testcase name="ruminationIsFiniteNonstackingAndRespectsPharmacophobia" classname="com.shatteredpixel.shatteredpixeldungeon.CowMechanicsTest" time="0.0"/>
+  <testcase name="hiddenDistantAndRootedTargetsCannotBeCharged" classname="com.shatteredpixel.shatteredpixeldungeon.CowMechanicsTest" time="0.001"/>
+  <testcase name="resourceRejectsNegativeInputsCapsHugeGainsAndNeverChargesByWaiting" classname="com.shatteredpixel.shatteredpixeldungeon.CowMechanicsTest" time="0.001"/>
+  <system-out><![CDATA[[GAME] ** 顶撞需要范围内的可见敌人，以及没有墙壁、深渊或其他生物阻挡的直线路径。
+[GAME] ** 顶撞需要范围内的可见敌人，以及没有墙壁、深渊或其他生物阻挡的直线路径。
+[GAME] ** 还需要至少3点倔劲。先好好打一场，再响铃吧。
+[GAME] ** 顶撞需要范围内的可见敌人，以及没有墙壁、深渊或其他生物阻挡的直线路径。
+[GAME] ** 顶撞需要范围内的可见敌人，以及没有墙壁、深渊或其他生物阻挡的直线路径。
+[GAME] ** 顶撞需要范围内的可见敌人，以及没有墙壁、深渊或其他生物阻挡的直线路径。
+[GAME] ** 顶撞需要范围内的可见敌人，以及没有墙壁、深渊或其他生物阻挡的直线路径。
+[GAME] ** 顶撞需要范围内的可见敌人，以及没有墙壁、深渊或其他生物阻挡的直线路径。
+[GAME] ** 顶撞需要范围内的可见敌人，以及没有墙壁、深渊或其他生物阻挡的直线路径。
+[GAME] ** 顶撞需要范围内的可见敌人，以及没有墙壁、深渊或其他生物阻挡的直线路径。
+[GAME] ** 顶撞需要范围内的可见敌人，以及没有墙壁、深渊或其他生物阻挡的直线路径。
+[GAME] ** 顶撞需要范围内的可见敌人，以及没有墙壁、深渊或其他生物阻挡的直线路径。
+[GAME] ** 顶撞需要范围内的可见敌人，以及没有墙壁、深渊或其他生物阻挡的直线路径。
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

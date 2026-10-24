@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.shatteredpixel.shatteredpixeldungeon.CowCraftJournalTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2026-10-24T01:11:31.817Z" hostname="f3284b334e2d" time="0.026">
+  <properties/>
+  <testcase name="nightShiftOnlyTrainsOnFirstResolvedHostileHitAndPersistsThatReceipt" classname="com.shatteredpixel.shatteredpixeldungeon.CowCraftJournalTest" time="0.007"/>
+  <testcase name="stampedeCountsOncePerEffectiveCastAndEvolvesAtThreeAndSeven" classname="com.shatteredpixel.shatteredpixeldungeon.CowCraftJournalTest" time="0.001"/>
+  <testcase name="everyDiscoveryIsOneTimeAndOnlyTwoOfferAOneTimeTwoPointShield" classname="com.shatteredpixel.shatteredpixeldungeon.CowCraftJournalTest" time="0.001"/>
+  <testcase name="emptyOrNegatedStampedeCannotTrainAndInvalidCastCannotSpend" classname="com.shatteredpixel.shatteredpixeldungeon.CowCraftJournalTest" time="0.001"/>
+  <testcase name="stationaryAbilitiesRejectInsufficientEnergyAndParalysis" classname="com.shatteredpixel.shatteredpixeldungeon.CowCraftJournalTest" time="0.001"/>
+  <testcase name="oldPastureAndOldNightShiftCannotGrantUnpaidUpgradePractice" classname="com.shatteredpixel.shatteredpixeldungeon.CowCraftJournalTest" time="0.001"/>
+  <testcase name="pastureMasteryAddsBoundedShieldAndOneFootingRecoveryPerField" classname="com.shatteredpixel.shatteredpixeldungeon.CowCraftJournalTest" time="0.001"/>
+  <testcase name="nightMasteryUnlocksCleanseAndTwoExtraTurnsWithoutFreeCharge" classname="com.shatteredpixel.shatteredpixeldungeon.CowCraftJournalTest" time="0.002"/>
+  <testcase name="partialDiscoveryCountersSurviveSaveAndContinueExactlyOnceAtTheirThresholds" classname="com.shatteredpixel.shatteredpixeldungeon.CowCraftJournalTest" time="0.001"/>
+  <testcase name="skillPracticeIsIndependentBoundedSavedAndNeverGrantedToInvalidActors" classname="com.shatteredpixel.shatteredpixeldungeon.CowCraftJournalTest" time="0.001"/>
+  <testcase name="pastureOnlyTrainsOnFirstRealEnemyAndKeepsItsReceiptAcrossSave" classname="com.shatteredpixel.shatteredpixeldungeon.CowCraftJournalTest" time="0.001"/>
+  <testcase name="deadOrForeignHeroesCannotCreateOrMutateDiscoveryStateAndAlbumIsReadOnly" classname="com.shatteredpixel.shatteredpixeldungeon.CowCraftJournalTest" time="0.002"/>
+  <testcase name="allEighteenDiscoveryEventsAreReachableThroughTheirGameplayHooks" classname="com.shatteredpixel.shatteredpixeldungeon.CowCraftJournalTest" time="0.005"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

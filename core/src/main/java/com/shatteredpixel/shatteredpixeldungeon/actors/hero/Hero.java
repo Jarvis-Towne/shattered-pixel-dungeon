@@ -63,6 +63,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SnipersMark;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Stubbornness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.NightShift;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CowLegend;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CowJournal;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.TimeStasis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
@@ -497,7 +499,18 @@ public class Hero extends Char {
 	
 	@Override
 	public boolean attack(Char enemy, float dmgMulti, float dmgBonus, float accMulti) {
+		boolean cowTarget = heroClass == HeroClass.COW && enemy != null && enemy.isAlive()
+				&& enemy.alignment == Alignment.ENEMY;
+		int before = cowTarget ? enemy.HP + enemy.shielding() : 0;
 		boolean result = super.attack(enemy, dmgMulti, dmgBonus, accMulti);
+		if (cowTarget && isAlive() && result) {
+			int actual = before - enemy.HP - enemy.shielding();
+			if (actual > 0) {
+				CowLegend.recordResolvedHit(this, enemy, actual);
+				if (buff(NightShift.class) != null) buff(NightShift.class).onEffectiveHit(this);
+				CowJournal.onHit(this, enemy, actual);
+			}
+		}
 		if (!(belongings.attackingWeapon() instanceof MissileWeapon)){
 			if (buff(Talent.PreciseAssaultTracker.class) != null){
 				buff(Talent.PreciseAssaultTracker.class).detach();
@@ -1691,6 +1704,7 @@ public class Hero extends Char {
 		if (effectiveDamage <= 0) return;
 
 		Stubbornness.onDamage(this, src, effectiveDamage);
+		CowJournal.onDamage(this, src, effectiveDamage);
 
 		if (buff(Challenge.DuelParticipant.class) != null){
 			buff(Challenge.DuelParticipant.class).addDamage(effectiveDamage);
@@ -2334,9 +2348,12 @@ public class Hero extends Char {
 	@Override
 	public void move(int step, boolean travelling) {
 		boolean wasHighGrass = Dungeon.level.map[step] == Terrain.HIGH_GRASS;
+		int oldPosition = pos;
+		int terrain = Dungeon.level.map[step];
 
 		super.move( step, travelling);
 		if (travelling) Stubbornness.onStep(this, wasHighGrass);
+		if (travelling && pos != oldPosition && pos == step) CowJournal.onMove(this, terrain);
 		
 		if (!flying && travelling) {
 			if (Dungeon.level.water[pos]) {

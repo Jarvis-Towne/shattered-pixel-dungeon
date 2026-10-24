@@ -1,0 +1,135 @@
+{
+  "version": "1.1.0",
+  "version_code": 1100,
+  "package": "com.jarvistowne.jiangniu",
+  "base_commit": "bf33b4688cfe7381a32e833141f218a2783660c7",
+  "apk_sha256": "72b9f880c54ffd94c86a8d664ffb1668e660a4e9efb30196d1630f939b9d2f4e",
+  "apk_bytes": 35455851,
+  "core_suites": [
+    {
+      "name": "com.shatteredpixel.shatteredpixeldungeon.CowBellEvolutionTest",
+      "tests": "10",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.shatteredpixel.shatteredpixeldungeon.CowCraftJournalTest",
+      "tests": "13",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.shatteredpixel.shatteredpixeldungeon.CowGearEvolutionTest",
+      "tests": "10",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.shatteredpixel.shatteredpixeldungeon.CowIntegrationTest",
+      "tests": "8",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.shatteredpixel.shatteredpixeldungeon.CowMechanicsTest",
+      "tests": "16",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "lint_issues": [
+    {
+      "id": "UnusedAttribute",
+      "severity": "Warning",
+      "message": "Attribute `targetSandboxVersion` is only used in API level 26 and higher (current min is 21)"
+    },
+    {
+      "id": "UnusedAttribute",
+      "severity": "Warning",
+      "message": "Attribute `appCategory` is only used in API level 26 and higher (current min is 21)"
+    },
+    {
+      "id": "UnusedAttribute",
+      "severity": "Warning",
+      "message": "Attribute `resizeableActivity` is only used in API level 24 and higher (current min is 21)"
+    },
+    {
+      "id": "UseRequiresApi",
+      "severity": "Warning",
+      "message": "Use `@RequiresApi(14) instead of `@TargetApi` to propagate the requirement to callers of `onFullBackup`"
+    },
+    {
+      "id": "ObsoleteSdkInt",
+      "severity": "Warning",
+      "message": "Unnecessary; `SDK_INT` is always >= 14"
+    }
+  ],
+  "android_upgrade": {
+    "status": "passed",
+    "tests": 1,
+    "seconds": 110.538,
+    "input_version": 1001,
+    "device": "Android 9 API28 x86 480x800 software emulator",
+    "evidence": "android-upgrade/instrumentation.txt",
+    "checks": [
+      "in-place upgrade",
+      "normal continue from real old save",
+      "class subclass position depth branch level max-health gold equipment levels armor ability resolve preserved",
+      "one-time practice migration",
+      "save and reload again"
+    ]
+  },
+  "android_smoke": {
+    "status": "passed",
+    "tests": 1,
+    "seconds": 175.453,
+    "device": "Android 9 API28 x86 480x800 software emulator",
+    "screenshots": 13,
+    "evidence": "android-smoke/instrumentation.txt",
+    "checks": [
+      "select cow hero using touch",
+      "Chinese hero/evolved weapon/bell descriptions",
+      "move and base skill",
+      "subclass and armor abilities",
+      "touch guide and album actions",
+      "real album touch scroll with all18 records",
+      "stage3 debate touch action causes damage and Weakness, costs4 resolve",
+      "save/load stage3 practice resolve and all18 journal flags"
+    ],
+    "injected_late_conditions": [
+      "hero level14",
+      "90 practice",
+      "all18 journal entries for long-text layout",
+      "test target enemy"
+    ],
+    "not_a_full_playthrough": true
+  },
+  "github_actions_used": false,
+  "implementation_commit": "ed178827c7cc1d5c3a4154b0eef2a55af4e5f7f3",
+  "certificate_sha256": "5c09895ed947c7f965480468dcc026af0d3a4686fcbc910d0ec5eead57a15a00",
+  "signature_matches_v100": true,
+  "zipalign_16k": "passed",
+  "native_abis": [
+    "armeabi-v7a",
+    "arm64-v8a",
+    "x86",
+    "x86_64"
+  ],
+  "assets_checks": "passed",
+  "build": "passed",
+  "lint_scope": "offline; dependency freshness checks are not included",
+  "legacy_fixture": {
+    "source_commit": "bf33b4688cfe7381a32e833141f218a2783660c7",
+    "original_apk_sha256": "10510d86e256e190c34be008bb1243a1595c1f323f114f068362fa4d10aaa21a",
+    "original_test_code_unchanged": true,
+    "test_status": "passed",
+    "tests": 1,
+    "seconds": 155.527,
+    "saved_version": 1001
+  }
+}

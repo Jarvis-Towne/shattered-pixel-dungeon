@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.shatteredpixel.shatteredpixeldungeon.CowIntegrationTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-24T01:11:30.829Z" hostname="f3284b334e2d" time="0.953">
+  <properties/>
+  <testcase name="originalClassOrderAndCowUnlockRemainStable" classname="com.shatteredpixel.shatteredpixeldungeon.CowIntegrationTest" time="0.002"/>
+  <testcase name="crownCreatesCowArmorAndAllThreeAbilityTrees" classname="com.shatteredpixel.shatteredpixeldungeon.CowIntegrationTest" time="0.057"/>
+  <testcase name="cowSaveRoundTripKeepsClassBranchesEquipmentTalentsAndResource" classname="com.shatteredpixel.shatteredpixeldungeon.CowIntegrationTest" time="0.032"/>
+  <testcase name="allLocalesRetainChineseCowTextAndCompleteTalentDescriptions" classname="com.shatteredpixel.shatteredpixeldungeon.CowIntegrationTest" time="0.566"/>
+  <testcase name="allSevenHeroesCanInitializeRealStartingLoadouts" classname="com.shatteredpixel.shatteredpixeldungeon.CowIntegrationTest" time="0.022"/>
+  <testcase name="masteryAndBothBranchesProvideDistinctCompleteTrees" classname="com.shatteredpixel.shatteredpixeldungeon.CowIntegrationTest" time="0.002"/>
+  <testcase name="cowStartsWithItsOwnItemsAndFiniteResource" classname="com.shatteredpixel.shatteredpixeldungeon.CowIntegrationTest" time="0.001"/>
+  <testcase name="nativeSpriteFramesAndIconsLoadWithinTheirAtlases" classname="com.shatteredpixel.shatteredpixeldungeon.CowIntegrationTest" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

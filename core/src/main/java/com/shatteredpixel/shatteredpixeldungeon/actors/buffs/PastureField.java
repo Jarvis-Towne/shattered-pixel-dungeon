@@ -18,7 +18,9 @@ import java.util.ArrayList;
 
 /** An anchored field; it is invalidated immediately by a floor or branch transition. */
 public class PastureField extends Buff {
-    private int center, depth, branch, turns, radius, shieldCap, pulses;
+    private int center, depth, branch, turns, radius, shieldCap, pulses, mastery;
+    private boolean practiced;
+    private boolean restoredFooting;
     { type = buffType.POSITIVE; }
 
     public void setup(Hero hero) {
@@ -28,8 +30,11 @@ public class PastureField extends Buff {
         int wide = hero.pointsInTalent(Talent.COW_WIDE_PASTURE);
         turns = 8 + 2*wide;
         radius = 2 + wide/2;
-        shieldCap = 8 + hero.lvl/2;
+        mastery = CowCraft.rank(hero, CowCraft.PASTURE);
+        shieldCap = 8 + hero.lvl/2 + (mastery >= 1 ? 2 : 0);
         pulses = 0;
+        practiced = false;
+        restoredFooting = false;
         for (Char ally : new ArrayList<>(Actor.chars())) {
             if (ally.alignment == Char.Alignment.ALLY && contains(ally.pos)) {
                 Buff.affect(ally, CowGuard.class).set(shieldCap, turns + 1);
@@ -50,9 +55,11 @@ public class PastureField extends Buff {
         }
         Hero hero = (Hero)target;
         int fence = hero.pointsInTalent(Talent.COW_LIVING_FENCE);
+        boolean enemyPresent = false;
         for (Char ch : new ArrayList<>(Actor.chars())) {
-            if (!contains(ch.pos)) continue;
+            if (!ch.isAlive() || !contains(ch.pos)) continue;
             if (ch.alignment == Char.Alignment.ENEMY) {
+                enemyPresent = true;
                 Buff.prolong(ch, Cripple.class, 2f);
                 if (fence > 0) ch.damage(fence, hero);
             } else if (ch.alignment == Char.Alignment.ALLY && pulses % 3 == 0) {
@@ -60,6 +67,15 @@ public class PastureField extends Buff {
                 int restored = 1 + hero.pointsInTalent(Talent.COW_RESTFUL_FIELD);
                 guard.set(Math.min(shieldCap, guard.shielding() + restored), 3);
             }
+        }
+        if (enemyPresent && !practiced) {
+            practiced = true;
+            CowCraft.record(hero, CowCraft.PASTURE, true);
+        }
+        if (!restoredFooting && pulses >= 2 && mastery >= 2
+                && contains(hero.pos)) {
+            restoredFooting = true;
+            Buff.detach(hero, Cripple.class);
         }
         if (hero.sprite != null && pulses % 3 == 0) {
             for (int cell = 0; cell < Dungeon.level.length(); cell++) {
@@ -83,11 +99,18 @@ public class PastureField extends Buff {
         b.put("pasture_center", center); b.put("pasture_depth", depth); b.put("pasture_branch", branch);
         b.put("pasture_turns", turns); b.put("pasture_radius", radius); b.put("pasture_cap", shieldCap);
         b.put("pasture_pulses", pulses);
+        b.put("pasture_mastery", mastery);
+        b.put("pasture_practiced", practiced);
+        b.put("pasture_footing", restoredFooting);
     }
     @Override public void restoreFromBundle(Bundle b) {
         super.restoreFromBundle(b);
         center = b.getInt("pasture_center"); depth = b.getInt("pasture_depth"); branch = b.getInt("pasture_branch");
         turns = b.getInt("pasture_turns"); radius = b.getInt("pasture_radius"); shieldCap = b.getInt("pasture_cap");
         pulses = b.getInt("pasture_pulses");
+        mastery = Math.max(0, Math.min(2, b.getInt("pasture_mastery")));
+        // Old active fields cannot award practice for a cast made before the upgrade.
+        practiced = !b.contains("pasture_practiced") || b.getBoolean("pasture_practiced");
+        restoredFooting = b.getBoolean("pasture_footing");
     }
 }

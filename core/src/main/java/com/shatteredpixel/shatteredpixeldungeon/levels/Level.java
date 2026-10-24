@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionEnemy;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CowBellCombo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicalSight;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
@@ -625,6 +626,8 @@ public abstract class Level implements Bundlable {
 		//awareness also doesn't, honestly it's weird that it's a buff
 		Awareness awareness = Dungeon.hero.buff(Awareness.class);
 		if (awareness != null) awareness.detach();
+		// A bell sequence belongs to one encounter, even if the hero immediately returns.
+		Buff.detach(Dungeon.hero, CowBellCombo.class);
 
 		Char ally = Stasis.getStasisAlly();
 		if (Char.hasProp(ally, Char.Property.IMMOVABLE)){

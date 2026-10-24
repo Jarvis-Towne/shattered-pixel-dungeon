@@ -21,12 +21,19 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.CowArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.CowhideArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CowBell;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.OxHorn;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ItemSlot;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
+import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
+import com.watabou.noosa.ui.Component;
 
 public class WndInfoItem extends Window {
 	
@@ -37,6 +44,7 @@ public class WndInfoItem extends Window {
 
 	//only one WndInfoItem can appear at a time
 	private static WndInfoItem INSTANCE;
+	private ScrollPane descriptionPane;
 
 	public WndInfoItem( Heap heap ) {
 
@@ -98,8 +106,78 @@ public class WndInfoItem extends Window {
 		titlebar.color( color );
 		
 		RenderedTextBlock txtInfo = PixelScene.renderTextBlock( item.info(), 6 );
-		
-		layoutFields(titlebar, txtInfo);
+
+		if (item instanceof CowBell || item instanceof OxHorn
+				|| item instanceof CowhideArmor || item instanceof CowArmor) {
+			layoutCowFields(titlebar, txtInfo, item);
+		} else {
+			layoutFields(titlebar, txtInfo);
+		}
+	}
+
+	/** Keep the title and WndUseItem's action rows fixed while the long description scrolls. */
+	private void layoutCowFields(IconTitle title, RenderedTextBlock info, Item item) {
+		int availableWidth = Math.max(1, PixelScene.uiCamera.width - chrome.marginHor() - 12);
+		int width = Math.min(PixelScene.landscape() ? 220 : 160, availableWidth);
+		int maxHeight = Math.max(1, PixelScene.uiCamera.height - chrome.marginVer() - 12);
+		int buttonSpace = actionRowsHeight(item, width);
+		title.setRect(0, 0, this instanceof WndUseItem ? width - 16 : width, 0);
+		add(title);
+
+		float top = title.bottom() + GAP;
+		info.maxWidth(Math.max(1, width - 4));
+		info.setPos(0, 0);
+		Component content = new Component();
+		content.add(info);
+		content.setSize(width, Math.max(1, info.height()));
+		int viewport = Math.max(1, Math.min((int)Math.ceil(content.height()),
+				(int)Math.floor(maxHeight - buttonSpace - top - 2)));
+		resize(width, (int)Math.ceil(viewport + top + 2));
+		descriptionPane = new ScrollPane(content);
+		add(descriptionPane);
+		descriptionPane.setRect(0, top, width, viewport);
+	}
+
+	/** Match WndUseItem's measured button widths, one-pixel gaps and three-button row limit. */
+	private int actionRowsHeight(Item item, int width) {
+		if (!(this instanceof WndUseItem) || Dungeon.hero == null
+				|| !Dungeon.hero.isAlive() || !Dungeon.hero.belongings.contains(item)) return 0;
+		int rows = 0, inRow = 0;
+		float remaining = width;
+		for (String action : item.actions(Dungeon.hero)) {
+			RenderedTextBlock label = PixelScene.renderTextBlock(item.actionName(action, Dungeon.hero), 8);
+			float buttonWidth = label.width() + 2;
+			label.destroy();
+			if (inRow > 0 && remaining < buttonWidth + 1) {
+				rows++;
+				inRow = 0;
+				remaining = width;
+			}
+			remaining -= buttonWidth + (inRow == 0 ? 0 : 1);
+			inRow++;
+			if (inRow >= 3 || remaining <= 0) {
+				rows++;
+				inRow = 0;
+				remaining = width;
+			}
+		}
+		if (inRow > 0) rows++;
+		return rows*17 + 1;
+	}
+
+	@Override public void resize(int width, int height) {
+		super.resize(width, height);
+		refreshDescriptionPane();
+	}
+
+	@Override public void offset(int xOffset, int yOffset) {
+		super.offset(xOffset, yOffset);
+		refreshDescriptionPane();
+	}
+
+	private void refreshDescriptionPane() {
+		if (descriptionPane != null) descriptionPane.setRect(descriptionPane.left(), descriptionPane.top(),
+				descriptionPane.width(), descriptionPane.height());
 	}
 
 	private void layoutFields(IconTitle title, RenderedTextBlock info){

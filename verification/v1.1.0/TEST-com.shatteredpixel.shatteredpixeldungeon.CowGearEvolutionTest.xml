@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.shatteredpixel.shatteredpixeldungeon.CowGearEvolutionTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-24T01:11:31.845Z" hostname="f3284b334e2d" time="0.008">
+  <properties/>
+  <testcase name="apronStoresOnlyBoundedRealDamageAndCannotBeUsedFromBackpack" classname="com.shatteredpixel.shatteredpixeldungeon.CowGearEvolutionTest" time="0.0"/>
+  <testcase name="legacySuccessfulHitsMigrateOnceAcrossActualCompressedHeroSave" classname="com.shatteredpixel.shatteredpixeldungeon.CowGearEvolutionTest" time="0.002"/>
+  <testcase name="fullSaveKeepsPracticeWeaponRhythmCompensationAndCooldown" classname="com.shatteredpixel.shatteredpixeldungeon.CowGearEvolutionTest" time="0.002"/>
+  <testcase name="resolvedDamageCreditsLethalHitsButRejectsZeroActualDamageAndFriendlies" classname="com.shatteredpixel.shatteredpixeldungeon.CowGearEvolutionTest" time="0.0"/>
+  <testcase name="firstAttackInitializesLegacyMigrationBeforeIncrementingItsCounter" classname="com.shatteredpixel.shatteredpixeldungeon.CowGearEvolutionTest" time="0.001"/>
+  <testcase name="onlyRealCombatEarnsPracticeAndMultiTargetSkillsCreditOnce" classname="com.shatteredpixel.shatteredpixeldungeon.CowGearEvolutionTest" time="0.001"/>
+  <testcase name="crownPreservesSourceArmorStatsAndInheritsApronCompensation" classname="com.shatteredpixel.shatteredpixeldungeon.CowGearEvolutionTest" time="0.0"/>
+  <testcase name="thirdHornHitPersistsAndInvalidHitsNeverAdvanceIt" classname="com.shatteredpixel.shatteredpixeldungeon.CowGearEvolutionTest" time="0.001"/>
+  <testcase name="compensationShieldHasRealCooldownAndCannotStackByRapidHits" classname="com.shatteredpixel.shatteredpixeldungeon.CowGearEvolutionTest" time="0.001"/>
+  <testcase name="stagePreviewIsReadOnlyAndEveryEvolutionRequiresBothPracticeAndLevel" classname="com.shatteredpixel.shatteredpixeldungeon.CowGearEvolutionTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
