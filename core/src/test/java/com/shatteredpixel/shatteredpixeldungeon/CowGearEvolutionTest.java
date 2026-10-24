@@ -14,6 +14,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.CowArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.CowhideArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.OxHorn;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Bundle;
 
 import org.junit.Before;
@@ -58,6 +59,8 @@ public class CowGearEvolutionTest {
         // Evolution now upgrades the actual equipment tier, not just its display name.
         assertEquals(4, ((OxHorn) hero.belongings.weapon).tier);
         assertEquals(4, hero.belongings.armor.tier);
+        assertEquals(ItemSpriteSheet.WAR_HAMMER, hero.belongings.weapon.image());
+        assertEquals(ItemSpriteSheet.COW_ARMOR, hero.belongings.armor.image());
         assertEquals(0, CowLegend.stage(null));
         hero.heroClass = HeroClass.WARRIOR;
         assertEquals(0, CowLegend.stage(hero));
