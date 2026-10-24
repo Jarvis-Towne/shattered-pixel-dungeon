@@ -76,7 +76,7 @@ public class CowCraftJournalTest {
             new TestStampede().cast(armor, hero, near.pos);
             assertTrue(near.HP < nearHealth);
             assertTrue(far.HP < farHealth);
-            assertEquals("贯穿多个敌人每次施放只记一次", Math.min(12, cast), CowCraft.uses(hero, CowCraft.STAMPEDE));
+            assertEquals("贯穿多个敌人每次施放只记一次", cast, CowCraft.uses(hero, CowCraft.STAMPEDE));
             assertEquals(cast >= 7 ? 2 : cast >= 3 ? 1 : 0, CowCraft.rank(hero, CowCraft.STAMPEDE));
             assertEquals("历练按施放计，不按命中目标数翻倍", 3 * cast, CowLegend.get(hero).points());
             assertEquals(65, armor.charge, 0f);
@@ -149,7 +149,7 @@ public class CowCraftJournalTest {
             armor.charge = 100;
             new TestPastureWard().cast(armor, hero);
             assertEquals(65, armor.charge, 0f);
-            int cap = 8 + hero.lvl / 2 + (cast >= 4 ? 2 : 0);
+            int cap = 8 + hero.lvl / 2 + (cast >= 4 ? 2 : 0) + CowCraft.growth(hero, CowCraft.PASTURE);
             assertEquals(cap, hero.buff(CowGuard.class).shielding());
             hero.buff(PastureField.class).act();
             assertEquals(cast, CowCraft.uses(hero, CowCraft.PASTURE));
@@ -167,7 +167,7 @@ public class CowCraftJournalTest {
         Buff.prolong(hero, Cripple.class, 100);
         field.act();
         assertNotNull("每片牧场只能恢复一次脚步", hero.buff(Cripple.class));
-        assertTrue(hero.buff(CowGuard.class).shielding() <= 10 + hero.lvl / 2);
+        assertTrue(hero.buff(CowGuard.class).shielding() <= 10 + hero.lvl / 2 + CowCraft.growth(hero, CowCraft.PASTURE));
         assertEquals(8, CowCraft.uses(hero, CowCraft.PASTURE));
         assertEquals(65, armor.charge, 0f);
     }
@@ -248,13 +248,13 @@ public class CowCraftJournalTest {
             assertEquals(cast, CowCraft.uses(hero, CowCraft.NIGHT));
             assertEquals(cast >= 7 ? 2 : cast >= 3 ? 1 : 0, CowCraft.rank(hero, CowCraft.NIGHT));
         }
-        assertEquals(10, MidnightSun.duration(hero), 0f);
+        assertEquals(10 + CowCraft.growth(hero, CowCraft.NIGHT), MidnightSun.duration(hero), 0f);
         armor.charge = 100;
         new TestMidnightSun().cast(armor, hero);
         assertEquals(60, armor.charge, 0f);
         assertTrue(melee(target));
         assertEquals(8, CowCraft.uses(hero, CowCraft.NIGHT));
-        assertEquals(10, MidnightSun.duration(hero), 0f);
+        assertEquals(10 + CowCraft.growth(hero, CowCraft.NIGHT), MidnightSun.duration(hero), 0f);
     }
 
     @Test public void stationaryAbilitiesRejectInsufficientEnergyAndParalysis() {
@@ -298,12 +298,12 @@ public class CowCraftJournalTest {
         for (int i = 0; i < 15; i++) CowCraft.record(hero, CowCraft.STAMPEDE, true);
         for (int i = 0; i < 3; i++) CowCraft.record(hero, CowCraft.PASTURE, true);
         CowCraft.record(hero, CowCraft.NIGHT, true);
-        assertEquals(12, CowCraft.uses(hero, CowCraft.STAMPEDE));
+        assertEquals(15, CowCraft.uses(hero, CowCraft.STAMPEDE));
         assertEquals(3, CowCraft.uses(hero, CowCraft.PASTURE));
         assertEquals(1, CowCraft.uses(hero, CowCraft.NIGHT));
         CowCraft craft = reload(hero.buff(CowCraft.class), new CowCraft());
         assertSame(craft, hero.buff(CowCraft.class));
-        assertEquals(12, CowCraft.uses(hero, CowCraft.STAMPEDE));
+        assertEquals(15, CowCraft.uses(hero, CowCraft.STAMPEDE));
         assertEquals(3, CowCraft.uses(hero, CowCraft.PASTURE));
         assertEquals(1, CowCraft.uses(hero, CowCraft.NIGHT));
         assertEquals(3, CowCraft.rank(hero, CowCraft.STAMPEDE));

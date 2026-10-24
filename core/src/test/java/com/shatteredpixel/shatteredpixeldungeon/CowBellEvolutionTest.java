@@ -304,7 +304,7 @@ public class CowBellEvolutionTest {
         Dungeon.depth = oldDepth;
         assertFalse("返回旧层仍不能重复领取", CowBellMastery.canDraw(hero));
         for (int i = 8; i < 18; i++) CowBellMastery.record(hero, 1);
-        assertEquals(15, CowBellMastery.uses(hero));
+        assertEquals(18, CowBellMastery.uses(hero));
         assertEquals(3, CowBellMastery.rank(hero));
     }
 

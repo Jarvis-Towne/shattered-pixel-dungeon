@@ -59,8 +59,8 @@ public class CowGearEvolutionTest {
         // Evolution now upgrades the actual equipment tier, not just its display name.
         assertEquals(4, ((OxHorn) hero.belongings.weapon).tier);
         assertEquals(4, hero.belongings.armor.tier);
-        assertEquals(ItemSpriteSheet.WAR_HAMMER, hero.belongings.weapon.image());
-        assertEquals(ItemSpriteSheet.COW_ARMOR, hero.belongings.armor.image());
+        assertEquals(ItemSpriteSheet.COW_HORN, hero.belongings.weapon.image());
+        assertEquals(ItemSpriteSheet.COW_HIDE, hero.belongings.armor.image());
         assertEquals(0, CowLegend.stage(null));
         hero.heroClass = HeroClass.WARRIOR;
         assertEquals(0, CowLegend.stage(hero));
@@ -88,9 +88,10 @@ public class CowGearEvolutionTest {
         assertEquals(7, legend.points());
         legend.addPoints(-1);
         legend.addPoints(Integer.MAX_VALUE);
-        assertEquals(CowLegend.MAX_POINTS, legend.points());
+        assertEquals(7L + Integer.MAX_VALUE, legend.points());
         legend.addPoints(Integer.MAX_VALUE);
-        assertEquals(CowLegend.MAX_POINTS, legend.points());
+        assertEquals(7L + 2L*Integer.MAX_VALUE, legend.points());
+        assertTrue(CowLegend.growth(legend.points()) > CowLegend.growth(90));
     }
 
     @Test public void legacySuccessfulHitsMigrateOnceAcrossActualCompressedHeroSave() throws Exception {
@@ -189,8 +190,10 @@ public class CowGearEvolutionTest {
     @Test public void thirdHornHitPersistsAndInvalidHitsNeverAdvanceIt() throws Exception {
         mature();
         OxHorn horn = (OxHorn) hero.belongings.weapon;
-        assertEquals(5, horn.min(0));
-        assertEquals(20, horn.max(0));
+        assertEquals(5 + CowLegend.growth(90), horn.min(0));
+        assertEquals(20 + 2*CowLegend.growth(90), horn.max(0));
+        assertEquals("进阶无需额外力量", 10, horn.STRReq(0));
+        assertEquals(ItemSpriteSheet.COW_HORN, horn.image());
         int ordinary = horn.proc(hero, enemy, 5);
         assertEquals(ordinary, horn.proc(hero, enemy, 5));
         assertEquals(2, horn.argumentHits());
