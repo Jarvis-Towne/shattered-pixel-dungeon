@@ -1,9 +1,9 @@
-name: Jiangniu v1.1.0 - Android APK
+name: Jiangniu v1.2.0 - Android APK
 
 on:
   push:
     branches:
-      - jiangniu-v1.1.0
+      - jiangniu-v1.2.0
   workflow_dispatch:
 
 permissions:
@@ -82,15 +82,15 @@ jobs:
           grep -Fqi "$EXPECTED_CERT" apk-signature.txt
 
           mkdir -p dist
-          cp "$APK" dist/Jiangniu-v1.1.0.apk
-          (cd dist && sha256sum Jiangniu-v1.1.0.apk > SHA256SUMS.txt)
+          cp "$APK" dist/Jiangniu-v1.2.0.apk
+          (cd dist && sha256sum Jiangniu-v1.2.0.apk > SHA256SUMS.txt)
           cp apk-signature.txt dist/signature.txt
           ls -lh dist
 
       - name: Upload directly installable APK
         uses: actions/upload-artifact@v4
         with:
-          name: Jiangniu-v1.1.0-APK
+          name: Jiangniu-v1.2.0-APK
           path: dist/
           if-no-files-found: error
           retention-days: 90
@@ -99,7 +99,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Jiangniu-v1.1.0-test-reports
+          name: Jiangniu-v1.2.0-test-reports
           path: |
             core/build/test-results/test/
             android/build/reports/lint-results-debug.*
@@ -118,7 +118,7 @@ jobs:
       - name: Download verified APK artifact
         uses: actions/download-artifact@v4
         with:
-          name: Jiangniu-v1.1.0-APK
+          name: Jiangniu-v1.2.0-APK
           path: dist
 
       - name: Create or refresh Jiangniu APK release
@@ -127,20 +127,20 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          TAG="jiangniu-v1.1.0-apk"
-          test -s dist/Jiangniu-v1.1.0.apk
+          TAG="jiangniu-v1.2.0-apk"
+          test -s dist/Jiangniu-v1.2.0.apk
           (cd dist && sha256sum --check SHA256SUMS.txt)
 
           if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             gh release upload "$TAG" \
-              dist/Jiangniu-v1.1.0.apk dist/SHA256SUMS.txt dist/signature.txt \
+              dist/Jiangniu-v1.2.0.apk dist/SHA256SUMS.txt dist/signature.txt \
               --repo "$GITHUB_REPOSITORY" --clobber
           else
             gh release create "$TAG" \
-              dist/Jiangniu-v1.1.0.apk dist/SHA256SUMS.txt dist/signature.txt \
+              dist/Jiangniu-v1.2.0.apk dist/SHA256SUMS.txt dist/signature.txt \
               --repo "$GITHUB_REPOSITORY" \
               --target "$GITHUB_SHA" \
-              --title "犟牛地牢 v1.1.0 · Android APK" \
-              --notes "由 GitHub Actions 构建并验证的 Android 可直接安装 APK。包名 com.jarvistowne.jiangniu，versionCode 1100。采用仓库中的公开体验版签名（不是商店级发布密钥）；与使用相同签名的 v1.0.0 可覆盖升级。请下载 APK，不需要下载源码 ZIP。校验值及签名记录见同一 Release 附件。" \
+              --title "犟牛地牢 v1.2.0 · Android APK" \
+              --notes "由 GitHub Actions 构建并验证的 Android 可直接安装 APK。包名 com.jarvistowne.jiangniu，versionCode 1200。采用仓库中的公开体验版签名（不是商店级发布密钥）；与使用相同签名的 v1.0.0 可覆盖升级。请下载 APK，不需要下载源码 ZIP。校验值及签名记录见同一 Release 附件。" \
               --prerelease
           fi
