@@ -165,7 +165,7 @@ public class CowUpgradeCompatibilityTest {
             weaponLevel = hero.getBundle("weapon").getInt("level");
             armorLevel = hero.getBundle("armor").getInt("level");
             this.resolve = resolve;
-            practice = Math.max(0, Math.min(CowLegend.MAX_POINTS, oldHits));
+            practice = Math.max(0, oldHits);
         }
 
         int stage() {

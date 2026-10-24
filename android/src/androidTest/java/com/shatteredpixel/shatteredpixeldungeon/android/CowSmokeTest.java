@@ -212,7 +212,7 @@ public class CowSmokeTest {
                 assertEquals(0, CowLegend.stage(hero));
                 hero.lvl = 14;
                 CowLegend legend = CowLegend.get(hero);
-                legend.addPoints(90 - legend.points());
+                legend.addPoints((int)Math.max(0L, 90L - legend.points()));
                 assertEquals(3, CowLegend.stage(hero));
                 assertEquals(90, legend.points());
                 assertChinese(CowLegend.get(hero).progress());
@@ -235,7 +235,7 @@ public class CowSmokeTest {
 
             WndUseItem bellWindow = onGame(() -> showBellMenu());
             screenshot("07-进化牛铃与动作菜单.png");
-            final int practiceBeforeGuide = onGame(() -> CowLegend.get(Dungeon.hero).points());
+            final long practiceBeforeGuide = onGame(() -> CowLegend.get(Dungeon.hero).points());
             final int resolveBeforeGuide = onGame(() -> Dungeon.hero.buff(Stubbornness.class).charge());
             final float timeBeforeGuide = onGame(() -> Actor.now());
             Point guideButton = onGame(() -> itemActionButton(bellWindow, CowBell.AC_GUIDE));
@@ -319,7 +319,7 @@ public class CowSmokeTest {
                 return null;
             });
 
-            final int savedPractice = onGame(() -> CowLegend.get(Dungeon.hero).points());
+            final long savedPractice = onGame(() -> CowLegend.get(Dungeon.hero).points());
             final String savedProgress = onGame(() -> CowLegend.get(Dungeon.hero).progress());
             final int savedResolve = onGame(() -> Dungeon.hero.buff(Stubbornness.class).charge());
             final int savedPosition = onGame(() -> {
