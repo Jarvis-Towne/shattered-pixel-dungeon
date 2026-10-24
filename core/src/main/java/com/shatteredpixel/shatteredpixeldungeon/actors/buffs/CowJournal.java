@@ -2,6 +2,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
@@ -56,7 +57,8 @@ public class CowJournal extends Buff {
 
     /** Never lose a one-off reward to a full inventory; null scenes have no loot spawn. */
     public static void grantItem(Hero hero, Item item) {
-        if (hero == null || item == null || hero != Dungeon.hero || Dungeon.level == null) return;
+        if (hero == null || item == null || hero != Dungeon.hero || Dungeon.level == null
+                || Challenges.isItemBlocked(item)) return;
         if (!item.collect()) {
             Heap heap = Dungeon.level.drop(item, hero.pos);
             if (heap.sprite != null) heap.sprite.drop();

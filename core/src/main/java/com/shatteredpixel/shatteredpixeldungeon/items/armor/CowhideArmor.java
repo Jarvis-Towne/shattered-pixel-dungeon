@@ -15,7 +15,15 @@ public class CowhideArmor extends ClothArmor {
 
     /** Actual armor tier evolves with the cow; glyphs and scroll upgrades remain intact. */
     public void evolveTo(int stage) {
-        tier = Math.max(tier, Math.min(4, Math.max(0, stage) + 1));
+        int form = Math.min(3, Math.max(0, stage));
+        tier = Math.max(tier, form + 1);
+        image = form == 0 ? ItemSpriteSheet.COW_HIDE : form == 1 ? ItemSpriteSheet.ARMOR_LEATHER
+                : form == 2 ? ItemSpriteSheet.ARMOR_SCALE : ItemSpriteSheet.COW_ARMOR;
+    }
+
+    @Override public boolean doEquip(Hero hero) {
+        if (hero != null && hero.heroClass == HeroClass.COW) evolveTo(CowLegend.stage(hero));
+        return super.doEquip(hero);
     }
 
     @Override public boolean doUnequip(Hero hero, boolean collect, boolean single) {

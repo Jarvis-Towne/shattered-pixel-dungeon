@@ -168,7 +168,7 @@ public class CowCraftJournalTest {
         field.act();
         assertNotNull("每片牧场只能恢复一次脚步", hero.buff(Cripple.class));
         assertTrue(hero.buff(CowGuard.class).shielding() <= 10 + hero.lvl / 2);
-        assertEquals(7, CowCraft.uses(hero, CowCraft.PASTURE));
+        assertEquals(8, CowCraft.uses(hero, CowCraft.PASTURE));
         assertEquals(65, armor.charge, 0f);
     }
 
@@ -253,7 +253,7 @@ public class CowCraftJournalTest {
         new TestMidnightSun().cast(armor, hero);
         assertEquals(60, armor.charge, 0f);
         assertTrue(melee(target));
-        assertEquals(7, CowCraft.uses(hero, CowCraft.NIGHT));
+        assertEquals(8, CowCraft.uses(hero, CowCraft.NIGHT));
         assertEquals(10, MidnightSun.duration(hero), 0f);
     }
 

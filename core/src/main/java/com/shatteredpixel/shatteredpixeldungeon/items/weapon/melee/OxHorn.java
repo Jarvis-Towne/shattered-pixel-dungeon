@@ -33,7 +33,16 @@ public class OxHorn extends MeleeWeapon {
     /** Stage changes the actual weapon tier, strength requirement and upgrade scaling.
      * The same item is retained: enchantment, augment, upgrades and saved hit rhythm survive. */
     public void evolveTo(int stage) {
-        tier = Math.max(tier, Math.min(4, Math.max(0, stage) + 1));
+        int form = Math.min(3, Math.max(0, stage));
+        tier = Math.max(tier, form + 1);
+        // Reuse existing pixel art so each forged form is visually recognizable.
+        image = form == 0 ? ItemSpriteSheet.COW_HORN : form == 1 ? ItemSpriteSheet.MACE
+                : form == 2 ? ItemSpriteSheet.BATTLE_AXE : ItemSpriteSheet.WAR_HAMMER;
+    }
+
+    @Override public boolean doEquip(Hero hero) {
+        if (hero != null && hero.heroClass == HeroClass.COW) evolveTo(CowLegend.stage(hero));
+        return super.doEquip(hero);
     }
 
     private int ownerStage() {
