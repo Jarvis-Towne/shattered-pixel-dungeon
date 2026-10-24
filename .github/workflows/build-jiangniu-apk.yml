@@ -1,0 +1,96 @@
+name: Jiangniu v1.1.0 - Android APK
+
+on:
+  push:
+    branches:
+      - jiangniu-v1.1.0
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jiangniu-apk-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-apk:
+    name: Build, test and verify installable APK
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install required Android SDK components
+        shell: bash
+        run: |
+          sdkmanager --install "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Check artwork and Chinese text
+        shell: bash
+        run: |
+          python3 -m pip install --user Pillow
+          python3 tools/check_cow_assets.py
+
+      - name: Test and build signed debug APK
+        shell: bash
+        run: |
+          bash ./gradlew --no-daemon \
+            :core:test \
+            :android:assembleDebug \
+            :android:assembleDebugAndroidTest \
+            :android:lintDebug
+
+      - name: Verify APK contents, alignment and signing identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK="android/build/outputs/apk/debug/android-debug.apk"
+          test -s "$APK"
+          python3 tools/check_apk.py "$APK"
+
+          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:?Android SDK missing}}"
+          "$SDK/build-tools/36.0.0/zipalign" -c -P 16 4 "$APK"
+
+          "$SDK/build-tools/36.0.0/apksigner" verify --verbose --print-certs "$APK" | tee apk-signature.txt
+          EXPECTED_CERT="5c09895ed947c7f965480468dcc026af0d3a4686fcbc910d0ec5eead57a15a00"
+          grep -Fqi "$EXPECTED_CERT" apk-signature.txt
+
+          mkdir -p dist
+          cp "$APK" dist/Jiangniu-v1.1.0.apk
+          (cd dist && sha256sum Jiangniu-v1.1.0.apk > SHA256SUMS.txt)
+          cp apk-signature.txt dist/signature.txt
+          ls -lh dist
+
+      - name: Upload directly installable APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Jiangniu-v1.1.0-APK
+          path: dist/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Jiangniu-v1.1.0-test-reports
+          path: |
+            core/build/test-results/test/
+            android/build/reports/lint-results-debug.*
+          if-no-files-found: ignore
+          retention-days: 30
