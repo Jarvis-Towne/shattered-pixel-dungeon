@@ -26,6 +26,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.WarmMilk;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MeadowCake;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfBullishResolve;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfCowCouncil;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.OvertimeInspector;
 import com.watabou.utils.Random;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -302,21 +305,28 @@ public class CowBell extends Item {
             stubborn.gain(DRAW_COST);
             return false;
         }
-        int outcome = Random.Int(4);
+        int outcome = Random.Int(5);
         switch (outcome) {
             case 0:
-                CowJournal.grantItem(hero, new WarmMilk());
+                CowJournal.grantItem(hero, new PotionOfBullishResolve());
                 break;
             case 1:
-                CowJournal.grantItem(hero, new MeadowCake());
+                CowJournal.grantItem(hero, new ScrollOfCowCouncil());
                 break;
             case 2:
                 Buff.affect(hero, CowGuard.class).set(5, 5);
                 stubborn.gain(1);
                 break;
-            default:
+            case 3:
                 Buff.prolong(hero, Weakness.class, 3f);
                 CowJournal.grantItem(hero, new PotionOfHealing());
+                break;
+            default:
+                // A hostile surprise always has a collectible payoff when defeated.
+                if (!OvertimeInspector.summon(hero)) {
+                    outcome = 0;
+                    CowJournal.grantItem(hero, new PotionOfBullishResolve());
+                }
                 break;
         }
         if (hero.sprite != null) {
