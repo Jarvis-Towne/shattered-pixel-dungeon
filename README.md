@@ -2,7 +2,7 @@
 
 > 桌面上那个总在皱眉的「牛哞」，带着围兜和一肚子意见进地牢了。基于 [Shattered Pixel Dungeon 4.0.2](https://github.com/00-Evan/shattered-pixel-dungeon) 的中文同人扩展，保留原版六名英雄，新增开局即可选择的第七英雄 **「犟牛」**。
 
-**v1.1.0 已完成本地编译，完整 APK 与源码 ZIP 随本次交付提供。GitHub 完整 APK 上传及源码分支发布：待完成。** [SHA-256 校验](downloads/SHA256SUMS.txt) · [完整玩法说明](docs/jiangniu-guide.md) · [更新日志](docs/jiangniu-release-notes.md) · [验证记录](verification/v1.1.0/README.md)
+**v1.1.0 已通过 GitHub Actions 自动编译、校验并发布 Android APK。** **[直接下载 v1.1.0 APK](https://github.com/Jarvis-Towne/shattered-pixel-dungeon/releases/download/jiangniu-v1.1.0-apk/Jiangniu-v1.1.0.apk)** · [GitHub Release](https://github.com/Jarvis-Towne/shattered-pixel-dungeon/releases/tag/jiangniu-v1.1.0-apk) · [自动构建与测试日志](https://github.com/Jarvis-Towne/shattered-pixel-dungeon/actions/runs/40058044477) · [构建说明](docs/github-actions-build.md)。 [SHA-256 校验](downloads/SHA256SUMS.txt) · [完整玩法说明](docs/jiangniu-guide.md) · [更新日志](docs/jiangniu-release-notes.md) · [验证记录](verification/v1.1.0/README.md)
 
 <p align="center"><img src="docs/art/cow-pixel-preview.png" width="520" alt="犟牛像素角色、装备与技能素材" /></p>
 
@@ -55,7 +55,7 @@
 
 ## 📱 下载、安装与更新
 
-当前提供本地构建的完整 `Jiangniu-v1.1.0.apk`；**GitHub APK 下载入口与源码分支尚未发布**，发布完成后再补充对应链接。
+**GitHub Releases 安装包：** **[Jiangniu-v1.1.0.apk（直接下载）](https://github.com/Jarvis-Towne/shattered-pixel-dungeon/releases/download/jiangniu-v1.1.0-apk/Jiangniu-v1.1.0.apk)**。也可以从 [GitHub Actions](https://github.com/Jarvis-Towne/shattered-pixel-dungeon/actions/runs/40058044477) 下载 APK Artifact ZIP，解压后安装内部的 `.apk` 文件；Release 的 APK 则无需解压。
 
 1. 在 Android 5.0 或更新系统中打开本次交付的 APK 安装。
 2. 首次启动默认简体中文，在开局选人界面直接选择第七位英雄「犟牛」。
@@ -63,7 +63,7 @@
 
 包名保持 `com.jarvistowne.jiangniu`，可与原版共存。应用内版本为 `4.0.2-1.1.0`，`versionCode` 为 `1100`。v1、v2 签名验证通过，证书与 v1.0.0 相同；使用固定公开开发签名，属于个人侧载体验版，详见 [签名说明](tools/signing/README.md)。
 
-APK 文件长度为 **35,455,851 字节**，SHA-256 为 `72b9f880c54ffd94c86a8d664ffb1668e660a4e9efb30196d1630f939b9d2f4e`。
+**GitHub Actions 最新发布 APK**：35,455,915 字节；SHA-256 为 `4f35eef634c3a3c74faebb0ef748c9569431ee4649c26d0b0974c43b68571458`（可下载 [CI 校验清单](https://github.com/Jarvis-Towne/shattered-pixel-dungeon/releases/download/jiangniu-v1.1.0-apk/SHA256SUMS.txt)）。此前本地构建的 APK 为 35,455,851 字节，SHA-256 为 `72b9f880c54ffd94c86a8d664ffb1668e660a4e9efb30196d1630f939b9d2f4e`，**不是本次 CI 下载文件的校验值**。
 
 ## 🧪 验证与源码
 
@@ -87,7 +87,7 @@ APK 文件长度为 **35,455,851 字节**，SHA-256 为 `72b9f880c54ffd94c86a8d6
 
 <p align="center">Android 9 实测：进化牛铃菜单与成长手册；后期条件为测试注入。</p>
 
-本版使用 **本地编译与测试**，不运行 GitHub Actions。当前交付完整 APK 与源码 ZIP；GitHub 完整 APK 上传和源码分支发布仍待完成。
+**测试边界：**下表的 Android 模拟器交互、v1.0.0 旧存档覆盖升级记录针对此前的本地构建 APK；GitHub Actions 已另行执行资源检查、核心测试、APK 与测试 APK 编译、Lint、APK 内容/四架构/16 KiB 对齐/签名检查，并成功发布 APK，但此次 CI **没有运行模拟器插桩交互测试**。详情参见 [GitHub Actions 构建说明](docs/github-actions-build.md)。
 
 - [详细玩法、数值、存档兼容和本地构建](docs/jiangniu-guide.md)
 - [版本更新说明](docs/jiangniu-release-notes.md)
