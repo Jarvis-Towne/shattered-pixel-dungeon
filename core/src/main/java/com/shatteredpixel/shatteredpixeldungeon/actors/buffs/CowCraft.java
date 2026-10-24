@@ -31,7 +31,7 @@ public class CowCraft extends Buff {
     public static int rank(Hero hero, int skill) {
         if (hero == null || hero.heroClass != HeroClass.COW || !validSkill(skill)) return 0;
         int count = uses(hero, skill);
-        return count >= 7 ? 2 : count >= 3 ? 1 : 0;
+        return count >= 12 ? 3 : count >= 7 ? 2 : count >= 3 ? 1 : 0;
     }
 
     /** Each effective activation earns practice once, regardless of the number of targets. */
@@ -40,7 +40,7 @@ public class CowCraft extends Buff {
                 || !validSkill(skill)) return;
         CowCraft craft = Buff.affect(hero, CowCraft.class);
         int oldRank = rank(hero, skill);
-        craft.uses[skill] = Math.min(7, craft.uses[skill] + 1);
+        craft.uses[skill] = Math.min(12, craft.uses[skill] + 1);
         CowLegend.recordArmorAbility(hero);
         if (rank(hero, skill) > oldRank && hero.sprite != null) {
             GLog.p(Messages.get(CowCraft.class, "practiced", Messages.get(CowCraft.class, "skill_" + skill)));
@@ -70,6 +70,6 @@ public class CowCraft extends Buff {
 
     @Override public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
-        for (int i = 0; i < uses.length; i++) uses[i] = Math.max(0, Math.min(7, bundle.getInt("cow_practice_" + i)));
+        for (int i = 0; i < uses.length; i++) uses[i] = Math.max(0, Math.min(12, bundle.getInt("cow_practice_" + i)));
     }
 }

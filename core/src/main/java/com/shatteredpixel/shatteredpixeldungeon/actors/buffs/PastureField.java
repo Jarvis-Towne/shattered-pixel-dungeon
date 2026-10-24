@@ -5,6 +5,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
@@ -29,9 +30,9 @@ public class PastureField extends Buff {
         branch = Dungeon.branch;
         int wide = hero.pointsInTalent(Talent.COW_WIDE_PASTURE);
         turns = 8 + 2*wide;
-        radius = 2 + wide/2;
         mastery = CowCraft.rank(hero, CowCraft.PASTURE);
-        shieldCap = 8 + hero.lvl/2 + (mastery >= 1 ? 2 : 0);
+        radius = 2 + wide/2 + (mastery >= 3 ? 1 : 0);
+        shieldCap = 8 + hero.lvl/2 + (mastery >= 1 ? 2 : 0) + (mastery >= 3 ? 3 : 0);
         pulses = 0;
         practiced = false;
         restoredFooting = false;
@@ -61,6 +62,7 @@ public class PastureField extends Buff {
             if (ch.alignment == Char.Alignment.ENEMY) {
                 enemyPresent = true;
                 Buff.prolong(ch, Cripple.class, 2f);
+                if (mastery >= 3) Buff.prolong(ch, Weakness.class, 2f);
                 if (fence > 0) ch.damage(fence, hero);
             } else if (ch.alignment == Char.Alignment.ALLY && pulses % 3 == 0) {
                 CowGuard guard = Buff.affect(ch, CowGuard.class);
@@ -108,7 +110,7 @@ public class PastureField extends Buff {
         center = b.getInt("pasture_center"); depth = b.getInt("pasture_depth"); branch = b.getInt("pasture_branch");
         turns = b.getInt("pasture_turns"); radius = b.getInt("pasture_radius"); shieldCap = b.getInt("pasture_cap");
         pulses = b.getInt("pasture_pulses");
-        mastery = Math.max(0, Math.min(2, b.getInt("pasture_mastery")));
+        mastery = Math.max(0, Math.min(3, b.getInt("pasture_mastery")));
         // Old active fields cannot award practice for a cast made before the upgrade.
         practiced = !b.contains("pasture_practiced") || b.getBoolean("pasture_practiced");
         restoredFooting = b.getBoolean("pasture_footing");

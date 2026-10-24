@@ -11,6 +11,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CowGuard;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
@@ -53,6 +54,7 @@ public class Stampede extends ArmorAbility {
                 if (enemy.isAlive()) Buff.prolong(enemy, Cripple.class, 4f);
                 if (enemy.HP + enemy.shielding() < before) {
                     if (hit == 0 && mastery >= 1 && enemy.isAlive()) Buff.prolong(enemy, Weakness.class, 2f);
+                    if (mastery >= 3 && enemy.isAlive()) Buff.prolong(enemy, Vulnerable.class, 2f);
                     hit++;
                 }
             }
@@ -62,7 +64,11 @@ public class Stampede extends ArmorAbility {
         }
         if (mastery >= 2 && hit >= 2) Buff.affect(hero, CowGuard.class).set(2, 4);
         CowCraft.record(hero, CowCraft.STAMPEDE, hit > 0);
-        armor.charge = Math.min(100, armor.charge + Math.min(12, hit*hero.pointsInTalent(Talent.COW_CHAIN_RUSH)));
+        // Fully practiced thunder hooves recover a small part of their own charge,
+        // only if real enemies lost HP or shielding. No reward on an empty cast.
+        int skillRefund = mastery >= 3 && hit >= 2 ? Math.min(6, 2*hit) : 0;
+        armor.charge = Math.min(100, armor.charge
+                + Math.min(12, hit*hero.pointsInTalent(Talent.COW_CHAIN_RUSH)) + skillRefund);
         Item.updateQuickslot();
         if (hero.sprite != null) {
             hero.sprite.operate(hero.pos);

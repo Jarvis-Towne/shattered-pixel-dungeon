@@ -30,7 +30,8 @@ public class MidnightSun extends ArmorAbility {
     { baseChargeUse = 40f; }
     public static float duration(Hero hero) {
         return 8f + 2f*hero.pointsInTalent(Talent.COW_LONG_NIGHT)
-                + (CowCraft.rank(hero, CowCraft.NIGHT) >= 2 ? 2f : 0f);
+                + (CowCraft.rank(hero, CowCraft.NIGHT) >= 2 ? 2f : 0f)
+                + (CowCraft.rank(hero, CowCraft.NIGHT) >= 3 ? 3f : 0f);
     }
     @Override protected void activate(ClassArmor armor, Hero hero, Integer target) {
         if (armor == null || hero == null || !hero.isAlive() || hero.paralysed > 0
@@ -40,7 +41,13 @@ public class MidnightSun extends ArmorAbility {
         if (CowCraft.rank(hero, CowCraft.NIGHT) >= 1) Buff.detach(hero, Cripple.class);
         Buff.prolong(hero, Light.class, duration);
         Buff.prolong(hero, Recharging.class, duration);
-        Buff.affect(hero, Stubbornness.class).gain(2);
+        int mastery = CowCraft.rank(hero, CowCraft.NIGHT);
+        Buff.affect(hero, Stubbornness.class).gain(mastery >= 3 ? 3 : 2);
+        if (mastery >= 3) {
+            Buff.detach(hero, Burning.class);
+            Buff.detach(hero, Poison.class);
+            Buff.affect(hero, CowGuard.class).set(3, 4);
+        }
         int dawn = hero.pointsInTalent(Talent.COW_DAWN_BRINGER);
         if (dawn > 0) {
             Buff.affect(hero, CowGuard.class).set(3*dawn, (int)duration);
