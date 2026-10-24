@@ -54,6 +54,9 @@ public class CowGearEvolutionTest {
         assertEquals(2, legend.stage());
         hero.lvl = 14;
         assertEquals(3, legend.stage());
+        // Evolution now upgrades the actual equipment tier, not just its display name.
+        assertEquals(4, ((OxHorn) hero.belongings.weapon).tier);
+        assertEquals(4, hero.belongings.armor.tier);
         assertEquals(0, CowLegend.stage(null));
         hero.heroClass = HeroClass.WARRIOR;
         assertEquals(0, CowLegend.stage(hero));
@@ -183,7 +186,7 @@ public class CowGearEvolutionTest {
         mature();
         OxHorn horn = (OxHorn) hero.belongings.weapon;
         assertEquals(5, horn.min(0));
-        assertEquals(14, horn.max(0));
+        assertEquals(20, horn.max(0));
         int ordinary = horn.proc(hero, enemy, 5);
         assertEquals(ordinary, horn.proc(hero, enemy, 5));
         assertEquals(2, horn.argumentHits());
@@ -194,7 +197,7 @@ public class CowGearEvolutionTest {
         save.put("horn", horn);
         OxHorn restored = (OxHorn) CowTestSupport.roundTrip(save).get("horn");
         hero.belongings.weapon = restored;
-        assertEquals(ordinary + 4, restored.proc(hero, enemy, 5));
+        assertEquals(ordinary + 8, restored.proc(hero, enemy, 5));
         assertEquals(0, restored.argumentHits());
         assertNotNull(enemy.buff(Cripple.class));
         assertNotNull(enemy.buff(Vulnerable.class));

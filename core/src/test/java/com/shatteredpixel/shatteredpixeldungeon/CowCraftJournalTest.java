@@ -76,7 +76,7 @@ public class CowCraftJournalTest {
             new TestStampede().cast(armor, hero, near.pos);
             assertTrue(near.HP < nearHealth);
             assertTrue(far.HP < farHealth);
-            assertEquals("贯穿多个敌人每次施放只记一次", Math.min(7, cast), CowCraft.uses(hero, CowCraft.STAMPEDE));
+            assertEquals("贯穿多个敌人每次施放只记一次", Math.min(12, cast), CowCraft.uses(hero, CowCraft.STAMPEDE));
             assertEquals(cast >= 7 ? 2 : cast >= 3 ? 1 : 0, CowCraft.rank(hero, CowCraft.STAMPEDE));
             assertEquals("历练按施放计，不按命中目标数翻倍", 3 * cast, CowLegend.get(hero).points());
             assertEquals(65, armor.charge, 0f);
@@ -298,7 +298,7 @@ public class CowCraftJournalTest {
         for (int i = 0; i < 9; i++) CowCraft.record(hero, CowCraft.STAMPEDE, true);
         for (int i = 0; i < 3; i++) CowCraft.record(hero, CowCraft.PASTURE, true);
         CowCraft.record(hero, CowCraft.NIGHT, true);
-        assertEquals(7, CowCraft.uses(hero, CowCraft.STAMPEDE));
+        assertEquals(12, CowCraft.uses(hero, CowCraft.STAMPEDE));
         assertEquals(3, CowCraft.uses(hero, CowCraft.PASTURE));
         assertEquals(1, CowCraft.uses(hero, CowCraft.NIGHT));
         CowCraft craft = reload(hero.buff(CowCraft.class), new CowCraft());
