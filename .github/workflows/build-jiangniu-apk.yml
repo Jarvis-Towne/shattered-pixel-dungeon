@@ -29,22 +29,33 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Install required Android SDK components
+      # GitHub-hosted Ubuntu runners already provide Android command-line tools.
+      # android-actions/setup-android@v3 installs obsolete SDK package "tools" on
+      # this runner image, so use the preinstalled current sdkmanager directly.
+      - name: Install Android SDK 36 and accept licenses
         shell: bash
         run: |
-          sdkmanager --install "platforms;android-36" "build-tools;36.0.0"
+          set -euo pipefail
+          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
+          test -n "$SDK"
+          SDKMANAGER="$SDK/cmdline-tools/latest/bin/sdkmanager"
+          test -x "$SDKMANAGER"
+          printf 'y\n%.0s' {1..80} | "$SDKMANAGER" --licenses > /dev/null
+          "$SDKMANAGER" --install "platforms;android-36" "build-tools;36.0.0"
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
       - name: Check artwork and Chinese text
         shell: bash
         run: |
-          python3 -m pip install --user Pillow
-          python3 tools/check_cow_assets.py
+          python -m pip install Pillow
+          python tools/check_cow_assets.py
 
       - name: Test and build signed debug APK
         shell: bash
