@@ -295,7 +295,7 @@ public class CowCraftJournalTest {
         CowCraft.record(hero, CowCraft.STAMPEDE, true);
         assertNull(hero.buff(CowCraft.class));
         hero.HP = hero.HT;
-        for (int i = 0; i < 9; i++) CowCraft.record(hero, CowCraft.STAMPEDE, true);
+        for (int i = 0; i < 15; i++) CowCraft.record(hero, CowCraft.STAMPEDE, true);
         for (int i = 0; i < 3; i++) CowCraft.record(hero, CowCraft.PASTURE, true);
         CowCraft.record(hero, CowCraft.NIGHT, true);
         assertEquals(12, CowCraft.uses(hero, CowCraft.STAMPEDE));
@@ -303,10 +303,10 @@ public class CowCraftJournalTest {
         assertEquals(1, CowCraft.uses(hero, CowCraft.NIGHT));
         CowCraft craft = reload(hero.buff(CowCraft.class), new CowCraft());
         assertSame(craft, hero.buff(CowCraft.class));
-        assertEquals(7, CowCraft.uses(hero, CowCraft.STAMPEDE));
+        assertEquals(12, CowCraft.uses(hero, CowCraft.STAMPEDE));
         assertEquals(3, CowCraft.uses(hero, CowCraft.PASTURE));
         assertEquals(1, CowCraft.uses(hero, CowCraft.NIGHT));
-        assertEquals(2, CowCraft.rank(hero, CowCraft.STAMPEDE));
+        assertEquals(3, CowCraft.rank(hero, CowCraft.STAMPEDE));
         assertEquals(1, CowCraft.rank(hero, CowCraft.PASTURE));
         assertEquals(0, CowCraft.rank(hero, CowCraft.NIGHT));
     }

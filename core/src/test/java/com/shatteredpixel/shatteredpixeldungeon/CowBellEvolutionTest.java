@@ -4,6 +4,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CowBellCombo;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CowBellMastery;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CowGuard;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CowLegend;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
@@ -281,6 +282,29 @@ public class CowBellEvolutionTest {
         assertNull(hero.buff(CowBellCombo.class));
         assertEquals(3, stubborn.charge());
         assertEquals(time + 1, hero.cooldown(), 0f);
+    }
+
+    @Test public void bellMasteryUnlocksRangeAndOneDrawPerVisitedDepth() {
+        evolve(8, 40);
+        assertEquals(3, CowBell.range(hero));
+        assertFalse(bell.actions(hero).contains(CowBell.AC_DRAW));
+        for (int i = 0; i < 3; i++) CowBellMastery.record(hero, 1);
+        assertEquals(1, CowBellMastery.rank(hero));
+        assertEquals(4, CowBell.range(hero));
+        for (int i = 3; i < 8; i++) CowBellMastery.record(hero, 1);
+        assertEquals(2, CowBellMastery.rank(hero));
+        assertTrue(bell.actions(hero).contains(CowBell.AC_DRAW));
+        assertTrue(CowBellMastery.canDraw(hero));
+        assertTrue(CowBellMastery.markDraw(hero));
+        assertFalse("不能在同一层反复开盲盒", CowBellMastery.canDraw(hero));
+        int oldDepth = Dungeon.depth;
+        Dungeon.depth = oldDepth + 1;
+        assertTrue("新深度可继续探索", CowBellMastery.canDraw(hero));
+        Dungeon.depth = oldDepth;
+        assertFalse("返回旧层仍不能重复领取", CowBellMastery.canDraw(hero));
+        for (int i = 8; i < 18; i++) CowBellMastery.record(hero, 1);
+        assertEquals(15, CowBellMastery.uses(hero));
+        assertEquals(3, CowBellMastery.rank(hero));
     }
 
     private void evolve(int level, int points) {
