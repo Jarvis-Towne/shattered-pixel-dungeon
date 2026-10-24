@@ -13,6 +13,11 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 public class CowhideArmor extends ClothArmor {
     { image = ItemSpriteSheet.COW_HIDE; unique = true; bones = false; }
 
+    /** Actual armor tier evolves with the cow; glyphs and scroll upgrades remain intact. */
+    public void evolveTo(int stage) {
+        tier = Math.max(tier, Math.min(4, Math.max(0, stage) + 1));
+    }
+
     @Override public boolean doUnequip(Hero hero, boolean collect, boolean single) {
         if (!super.doUnequip(hero, collect, single)) return false;
         CowLegend legend = hero.buff(CowLegend.class);
@@ -32,6 +37,12 @@ public class CowhideArmor extends ClothArmor {
                 && attacker.alignment == Char.Alignment.ENEMY && stubborn != null
                 && stubborn.charge() >= 3 && damage > 0) {
             damage = Math.max(0, damage - 1);
+            // From the second form onward, the work apron becomes genuine heavy armor.
+            // Extra mitigation only applies to substantial direct enemy hits.
+            int stage = CowLegend.stage((Hero) defender);
+            if (stage >= 2 && damage >= 7) {
+                damage = Math.max(0, damage - Math.min(stage - 1, damage/7));
+            }
         }
         return damage;
     }

@@ -7,6 +7,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.CowArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.CowhideArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.OxHorn;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -144,7 +145,23 @@ public class CowLegend extends Buff {
         }
     }
 
+    /** Keep the existing equipment objects; never reroll enchants or discard scroll upgrades. */
+    private void refreshEquipment() {
+        if (!(target instanceof Hero)) return;
+        Hero hero = (Hero) target;
+        int current = stage();
+        if (hero.belongings.weapon instanceof OxHorn) {
+            ((OxHorn)hero.belongings.weapon).evolveTo(current);
+        }
+        if (hero.belongings.armor instanceof CowhideArmor) {
+            ((CowhideArmor)hero.belongings.armor).evolveTo(current);
+        } else if (hero.belongings.armor instanceof CowArmor) {
+            ((CowArmor)hero.belongings.armor).evolveTo(current);
+        }
+    }
+
     private void announceEvolution() {
+        refreshEquipment();
         int current = stage();
         if (current > announcedStage) {
             if (target != null && target.sprite != null) {

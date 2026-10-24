@@ -11,6 +11,11 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 public class CowArmor extends ClassArmor {
     { image = ItemSpriteSheet.COW_ARMOR; }
 
+    /** The crown preserves an even higher transferred armor tier, if the player chose one. */
+    public void evolveTo(int stage) {
+        tier = Math.max(tier, Math.min(4, Math.max(0, stage) + 1));
+    }
+
     @Override public boolean doUnequip(Hero hero, boolean collect, boolean single) {
         if (!super.doUnequip(hero, collect, single)) return false;
         CowLegend legend = hero.buff(CowLegend.class);
