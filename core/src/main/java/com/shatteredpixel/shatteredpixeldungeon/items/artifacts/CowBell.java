@@ -7,6 +7,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CowBellCombo;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CowBellMastery;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CowGuard;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CowJournal;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CowLegend;
@@ -15,12 +16,17 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Stubbornness;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Daze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.WarmMilk;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.MeadowCake;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
+import com.watabou.utils.Random;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -41,8 +47,10 @@ public class CowBell extends Item {
     public static final String AC_DEBATE = "DEBATE";
     public static final String AC_GUIDE = "GUIDE";
     public static final String AC_ALBUM = "ALBUM";
+    public static final String AC_DRAW = "DRAW";
     public static final int COST = 3;
     public static final int DEBATE_COST = 4;
+    public static final int DRAW_COST = 4;
     {
         image = ItemSpriteSheet.COW_BELL;
         defaultAction = AC_CHARGE;
@@ -60,6 +68,7 @@ public class CowBell extends Item {
             actions.add(AC_CHARGE);
             actions.add(AC_STOMP);
             if (CowLegend.stage(hero) >= 3) actions.add(AC_DEBATE);
+            if (CowLegend.stage(hero) >= 2 && CowBellMastery.rank(hero) >= 2) actions.add(AC_DRAW);
             actions.add(AC_GUIDE);
             actions.add(AC_ALBUM);
         }
@@ -69,16 +78,20 @@ public class CowBell extends Item {
     @Override public void execute(final Hero hero, String action) {
         super.execute(hero, action);
         if (!AC_CHARGE.equals(action) && !AC_STOMP.equals(action) && !AC_DEBATE.equals(action)
-                && !AC_GUIDE.equals(action) && !AC_ALBUM.equals(action)) return;
+                && !AC_DRAW.equals(action) && !AC_GUIDE.equals(action) && !AC_ALBUM.equals(action)) return;
         if (hero == null || hero.heroClass != HeroClass.COW) { GLog.w(Messages.get(this, "not_cow")); return; }
         if (AC_GUIDE.equals(action)) { GameScene.show(new WndCowNotes(guide(hero))); return; }
         if (AC_ALBUM.equals(action)) { GameScene.show(new WndCowNotes(CowJournal.album(hero))); return; }
         if (!hero.isAlive() || hero.paralysed > 0 || Dungeon.level == null) return;
-        int cost = AC_DEBATE.equals(action) ? DEBATE_COST : COST;
+        if (AC_DRAW.equals(action) && !CowBellMastery.canDraw(hero)) {
+            GLog.w(Messages.get(this, "draw_used")); return;
+        }
+        int cost = AC_DRAW.equals(action) ? DRAW_COST : AC_DEBATE.equals(action) ? DEBATE_COST : COST;
         if (Buff.affect(hero, Stubbornness.class).charge() < cost) {
             GLog.w(Messages.get(this, "no_charge", cost)); return;
         }
         if (AC_DEBATE.equals(action)) { debate(hero); return; }
+        if (AC_DRAW.equals(action)) { draw(hero); return; }
         if (AC_STOMP.equals(action)) { stomp(hero); return; }
         if (hero.rooted) { GLog.w(Messages.get(this, "rooted")); return; }
         GameScene.selectCell(new CellSelector.Listener() {
@@ -89,9 +102,12 @@ public class CowBell extends Item {
         });
     }
 
-    public static int range(Hero hero) { return 3 + hero.pointsInTalent(Talent.COW_LONG_CHARGE); }
+    public static int range(Hero hero) {
+        return 3 + hero.pointsInTalent(Talent.COW_LONG_CHARGE) + (CowBellMastery.rank(hero) >= 1 ? 1 : 0);
+    }
     public static int impactDamage(Hero hero, int travelled) {
-        int damage = 4 + hero.lvl + Math.max(0, travelled)*2;
+        int damage = 4 + hero.lvl + Math.max(0, travelled)*2
+                + (CowBellMastery.rank(hero) >= 1 ? 2 : 0);
         return hero.subClass == HeroSubClass.BULLDOZER ? Math.round(damage*1.25f) : damage;
     }
 
@@ -153,6 +169,7 @@ public class CowBell extends Item {
             }
             if (hit && hero.isAlive() && Dungeon.level == level) {
                 hits = 1;
+                if (CowBellMastery.rank(hero) >= 3 && enemy.isAlive()) Buff.prolong(enemy, Daze.class, 1f);
                 if (stage >= 2 && CowBellCombo.onSkillHit(hero, CowBellCombo.CHARGE)
                         && hero.sprite != null) {
                     GLog.i(Messages.get(CowBell.class, "combo_charge"));
@@ -174,6 +191,7 @@ public class CowBell extends Item {
         }
         if (hero.isAlive() && Dungeon.level == level) {
             CowLegend.recordSkill(hero, hits);
+            CowBellMastery.record(hero, hits);
             Stubbornness.afterBell(hero);
         }
         Invisibility.dispel();
@@ -191,14 +209,20 @@ public class CowBell extends Item {
         Level level = Dungeon.level;
         int stage = CowLegend.stage(hero);
         int hits = 0;
+        int mastery = CowBellMastery.rank(hero);
+        int radius = mastery >= 3 ? 2 : 1;
         int talent = hero.pointsInTalent(Talent.COW_EARTHSHAKER);
         for (Char enemy : new ArrayList<>(Actor.chars())) {
             if (!hero.isAlive() || Dungeon.level != level) break;
-            if (enemy.alignment == Char.Alignment.ENEMY && enemy.isAlive() && level.distance(hero.pos, enemy.pos) <= 1) {
+            int distance = level.distance(hero.pos, enemy.pos);
+            if (enemy.alignment == Char.Alignment.ENEMY && enemy.isAlive() && distance <= radius) {
                 int before = enemy.HP + enemy.shielding();
-                enemy.damage(Math.max(1, 3 + hero.lvl/2 + 2*talent - enemy.drRoll()), hero);
+                int base = 3 + hero.lvl/2 + 2*talent;
+                // The mastered two-tile ring hits at half strength and never grants extra resolve.
+                if (distance > 1) base = Math.max(1, base/2);
+                enemy.damage(Math.max(1, base - enemy.drRoll()), hero);
                 if (enemy.HP + enemy.shielding() < before) hits++;
-                if (hero.isAlive() && Dungeon.level == level && enemy.isAlive()) Buff.prolong(enemy, Cripple.class, 2f + talent);
+                if (hero.isAlive() && Dungeon.level == level && enemy.isAlive()) Buff.prolong(enemy, Cripple.class, distance > 1 ? 1f : 2f + talent);
             }
         }
         if (hero.isAlive() && Dungeon.level == level) {
@@ -206,6 +230,7 @@ public class CowBell extends Item {
             Buff.affect(hero, CowGuard.class).set(2 + hero.lvl/5 + (combo ? 2 : 0), 4);
             if (combo && hero.sprite != null) GLog.i(Messages.get(CowBell.class, "combo_stomp"));
             CowLegend.recordSkill(hero, hits);
+            CowBellMastery.record(hero, hits);
             if (hero.hasTalent(Talent.COW_STEADY_HOOVES)) Buff.detach(hero, Cripple.class);
             if (hero.pointsInTalent(Talent.COW_STEADY_HOOVES) >= 2) Buff.detach(hero, Roots.class);
             Stubbornness.afterBell(hero);
@@ -251,12 +276,49 @@ public class CowBell extends Item {
         }
         if (hero.isAlive() && Dungeon.level == level) {
             CowLegend.recordSkill(hero, hits);
+            CowBellMastery.record(hero, hits);
             Stubbornness.afterBell(hero);
         }
         if (hero.sprite != null) {
             hero.sprite.operate(hero.pos);
             Sample.INSTANCE.play(Assets.Sounds.CHARGEUP);
             GLog.i(Messages.get(CowBell.class, "debate_cast"));
+        }
+        Invisibility.dispel();
+        hero.spendAndNext(Actor.TICK);
+        return true;
+    }
+
+    /** Once per visited depth: small boons with one risky but compensated outcome. */
+    public static boolean draw(Hero hero) {
+        if (hero == null || !hero.isAlive() || hero.paralysed > 0 || !CowBellMastery.canDraw(hero)) return false;
+        Stubbornness stubborn = hero.buff(Stubbornness.class);
+        if (stubborn == null || !stubborn.spendCharge(DRAW_COST)) return false;
+        // Reserve before random resolution, including returning to an earlier floor.
+        if (!CowBellMastery.markDraw(hero)) {
+            stubborn.gain(DRAW_COST);
+            return false;
+        }
+        int outcome = Random.Int(4);
+        switch (outcome) {
+            case 0:
+                CowJournal.grantItem(hero, new WarmMilk());
+                break;
+            case 1:
+                CowJournal.grantItem(hero, new MeadowCake());
+                break;
+            case 2:
+                Buff.affect(hero, CowGuard.class).set(5, 5);
+                stubborn.gain(1);
+                break;
+            default:
+                Buff.prolong(hero, Weakness.class, 3f);
+                CowJournal.grantItem(hero, new PotionOfHealing());
+                break;
+        }
+        if (hero.sprite != null) {
+            Sample.INSTANCE.play(Assets.Sounds.CHARGEUP);
+            GLog.p(Messages.get(CowBell.class, "draw_" + outcome));
         }
         Invisibility.dispel();
         hero.spendAndNext(Actor.TICK);
@@ -275,7 +337,8 @@ public class CowBell extends Item {
     public static String guide(Hero hero) {
         CowLegend legend = hero == null ? null : hero.buff(CowLegend.class);
         String progress = legend == null ? Messages.get(CowBell.class, "progress_empty") : legend.progress();
-        return Messages.get(CowBell.class, "guide", progress);
+        return Messages.get(CowBell.class, "guide", progress)
+                + "\n\n" + CowBellMastery.progress(hero);
     }
 
     @Override public String name() {
@@ -283,7 +346,8 @@ public class CowBell extends Item {
     }
 
     @Override public String desc() {
-        return super.desc() + "\n\n" + Messages.get(this, "stage_" + CowLegend.stage(Dungeon.hero));
+        return super.desc() + "\n\n" + Messages.get(this, "stage_" + CowLegend.stage(Dungeon.hero))
+                + "\n\n" + CowBellMastery.progress(Dungeon.hero);
     }
 
     @Override public boolean isUpgradable() { return false; }
