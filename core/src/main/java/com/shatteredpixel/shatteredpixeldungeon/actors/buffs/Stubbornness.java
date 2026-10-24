@@ -33,7 +33,8 @@ public class Stubbornness extends Buff {
 
     public static int capacity(Hero hero) {
         return 6 + hero.pointsInTalent(Talent.COW_STUBBORN_SPARK)
-                + hero.pointsInTalent(Talent.COW_STAMINA);
+                + hero.pointsInTalent(Talent.COW_STAMINA)
+                + CowJournal.collectionBonus(hero);
     }
 
     public int charge() { return charge; }

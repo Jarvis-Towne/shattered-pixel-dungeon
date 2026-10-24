@@ -5,7 +5,14 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfMindVision;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MeadowCake;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.WarmMilk;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -41,11 +48,52 @@ public class CowJournal extends Buff {
 
     public int count() { return Integer.bitCount(discoveries); }
 
+    /** A persistent, capped reward for discovering hidden game mechanics. */
+    public static int collectionBonus(Hero hero) {
+        CowJournal journal = hero == null ? null : hero.buff(CowJournal.class);
+        return journal == null ? 0 : Math.min(3, journal.count()/6);
+    }
+
+    /** Never lose a one-off reward to a full inventory; null scenes have no loot spawn. */
+    public static void grantItem(Hero hero, Item item) {
+        if (hero == null || item == null || hero != Dungeon.hero || Dungeon.level == null) return;
+        if (!item.collect()) {
+            Heap heap = Dungeon.level.drop(item, hero.pos);
+            if (heap.sprite != null) heap.sprite.drop();
+        }
+    }
+
+    private static void reward(Hero hero, int entry) {
+        Stubbornness resolve = hero.buff(Stubbornness.class);
+        switch (entry) {
+            case 0: Buff.prolong(hero, Haste.class, 3f); break;
+            case 1: grantItem(hero, new ScrollOfMagicMapping()); break;
+            case 2: if (resolve != null) resolve.gain(2); break;
+            case 3: Buff.affect(hero, CowGuard.class).set(2, 3); break;
+            case 4: Buff.prolong(hero, Bless.class, 4f); break;
+            case 5: grantItem(hero, new MeadowCake()); break;
+            case 6: if (resolve != null) resolve.gain(2); break;
+            case 7: Buff.prolong(hero, Bless.class, 4f); break;
+            case 8: grantItem(hero, new PotionOfHealing()); break;
+            case 9: Buff.prolong(hero, Recharging.class, 4f); break;
+            case 10: grantItem(hero, new ScrollOfUpgrade()); break;
+            case 11: grantItem(hero, new ScrollOfMagicMapping()); break;
+            case 12: grantItem(hero, new PotionOfMindVision()); break;
+            case 13: if (resolve != null) resolve.gain(2); break;
+            case 14: grantItem(hero, new WarmMilk()); break;
+            case 15: Buff.prolong(hero, Recharging.class, 6f); break;
+            case 16: Buff.prolong(hero, Haste.class, 3f); break;
+            case 17: Buff.affect(hero, CowGuard.class).set(2, 3); break;
+        }
+        // Very difficult complete-album bonus; awarded once, never on save restoration.
+        if (count() == TOTAL) grantItem(hero, new PotionOfStrength());
+    }
+
     public boolean discover(Hero hero, int entry) {
         if (!valid(hero) || entry < 0 || entry >= TOTAL || found(entry)) return false;
         discoveries |= 1 << entry;
         if (hero.sprite != null) GLog.p(Messages.get(CowJournal.class, "entry_" + entry));
-        if (entry == 3 || entry == 17) Buff.affect(hero, CowGuard.class).set(2, 3);
+        reward(hero, entry);
         return true;
     }
 
